@@ -18,6 +18,7 @@ export default function Home() {
     loanDetails,
     events,
     savings,
+    estimates,
     onRefreshRate,
     onAddEvent,
     onDeleteEvent
@@ -68,6 +69,8 @@ export default function Home() {
               expenses={expenses}
               events={events}
               savings={savings}
+              estimates={estimates}
+              rateSource={rateSource}
             />
           </div>
         </div>

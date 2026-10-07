@@ -34,3 +34,13 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## UKOS Companion
+
+The companion answers recorded spending, planned budgets, currency conversions, loan estimates, savings timelines, and calendar questions locally. Chat history lasts only for the current browser tab session; New Chat clears it. It does not modify your records.
+
+Run `npm test` for financial calculation and companion regression tests.
+
+For optional broader cloud responses, set `GEMINI_API_KEY` in an ignored `.env.local` file and restart the dev server. The user must enable the cloud checkbox before an unsupported local question is sent to Google Gemini. The conversation and selected budget, loan, savings, expense and calendar fields are shared; passport numbers, profile fields and document files are excluded. Recorded numerical questions continue to use deterministic local answers. Cloud responses time out and fall back to local guidance when unavailable.
+
+The cloud route requires application authentication and deployment rate limiting before a public deployment with a paid API key. Local request validation and size limits do not replace those controls.

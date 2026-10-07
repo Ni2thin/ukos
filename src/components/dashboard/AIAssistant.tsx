@@ -1,245 +1,159 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Card, CardHeader, CardTitle } from '../ui/Card';
-import { Send, Bot, Sparkles, User } from 'lucide-react';
-import { Expense, LoanDetails, CalendarEvent, SavingsGoal } from '@/lib/mockData';
-
+import { Card } from '../ui/Card';
+import { Send, Bot, Sparkles, User, RotateCcw, Square, ArrowUpRight } from 'lucide-react';
+import { Expense, LoanDetails, CalendarEvent, SavingsGoal, LivingEstimate } from '@/lib/mockData';
 import { currentMonthExpenses, lastSevenDaysExpenses, localDateKey } from '@/lib/finance';
+import type { ChatMessage } from '@/lib/companion';
 
 interface AIAssistantProps {
   exchangeRate: number;
+  rateSource?: string;
   loanDetails: LoanDetails;
   expenses: Expense[];
   events: CalendarEvent[];
   savings: SavingsGoal[];
+  estimates?: LivingEstimate[];
 }
-
-interface Message {
-  role: 'user' | 'assistant';
-  content: string;
+interface Message extends ChatMessage { mode?: 'local' | 'cloud' }
+const suggestions = [
+  ['Dashboard brief', 'Give me my dashboard brief'],
+  ['Review my budget', 'Break down my spending and budget'],
+  ['Savings roadmap', 'If I save £100 per month, how long until my goals?'],
+  ['Upcoming deadlines', 'What deadlines are coming up?'],
+  ['Convert currency', 'Convert ₹100,000 to GBP'],
+  ['Loan estimate', 'Show my loan and EMI estimate'],
+];
+function InlineText({text}: {text: string}) {
+  return <>{text.split(/(\*\*.*?\*\*|\*[^*]+\*)/g).map((part, i) =>
+    part.startsWith('**') && part.endsWith('**') ? <strong key={i}>{part.slice(2, -2)}</strong> :
+    part.startsWith('*') && part.endsWith('*') ? <em key={i}>{part.slice(1, -1)}</em> : part
+  )}</>;
 }
-
-export const AIAssistant: React.FC<AIAssistantProps> = ({
-  exchangeRate,
-  loanDetails,
-  expenses,
-  events,
-  savings,
-}) => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: 'assistant',
-      content: 'Hello! I am your **UKOS AI Companion**. I have real-time access to your expenses, loan accounts, savings goals, and calendar deadlines. Ask me anything about your finances or MSc schedule!'
+function MessageContent({text}: {text: string}) {
+  const lines = text.split('\n');
+  const blocks: React.ReactNode[] = [];
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (!line.trim()) continue;
+    if (/^[-*] /.test(line)) {
+      const items = [];
+      do { items.push(<li key={i}><InlineText text={lines[i].slice(2)} /></li>); i++; } while (i < lines.length && /^[-*] /.test(lines[i]));
+      blocks.push(<ul key={`list-${i}`} className="list-disc pl-4 space-y-1.5">{items}</ul>);
+      i--;
+    } else if (/^#{1,3} /.test(line)) {
+      blocks.push(<h4 key={i} className="font-bold text-sm"><InlineText text={line.replace(/^#{1,3} /, '')} /></h4>);
+    } else {
+      blocks.push(<p key={i}><InlineText text={line} /></p>);
     }
-  ]);
+  }
+  return <div className="text-xs leading-relaxed space-y-2.5 break-words select-text">{blocks}</div>;
+}
+
+export const AIAssistant: React.FC<AIAssistantProps> = ({exchangeRate, rateSource, loanDetails, expenses, events, savings, estimates = []}) => {
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  // Scroll to bottom of message list
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
+  const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
+  const [cloudAvailable, setCloudAvailable] = useState(false);
+  const [useCloudAI, setUseCloudAI] = useState(false);
+  const endRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const requestRef = useRef<AbortController | null>(null);
+  const retryRef = useRef('');
   useEffect(() => {
-    scrollToBottom();
-  }, [messages, isLoading]);
+    const controller = new AbortController();
+    fetch('/api/chat', {signal: controller.signal}).then(res => res.json()).then(data => setCloudAvailable(data.cloudAvailable === true)).catch(() => {});
+    return () => { controller.abort(); requestRef.current?.abort(); };
+  }, []);
+  useEffect(() => { endRef.current?.scrollIntoView({behavior:'smooth', block:'nearest'}); }, [messages, isLoading]);
 
-  // Generate Current Context to feed the API
   const getContextPayload = () => {
     const monthlyExpenses = currentMonthExpenses(expenses);
-    const monthlySpend = monthlyExpenses.reduce((sum, e) => sum + e.amountGbp, 0);
-    const weeklySpend = lastSevenDaysExpenses(expenses).reduce((sum, e) => sum + e.amountGbp, 0);
     const expensesByCategory: Record<string, number> = {};
-    monthlyExpenses.forEach(e => {
-      expensesByCategory[e.category] = (expensesByCategory[e.category] || 0) + e.amountGbp;
-    });
-    const upcomingEvents = events
-      .filter(e => e.date >= localDateKey())
-      .sort((a, b) => a.date.localeCompare(b.date))
-      .slice(0, 5);
-
+    monthlyExpenses.forEach(e => { expensesByCategory[e.category] = (expensesByCategory[e.category] || 0) + e.amountGbp; });
     return {
-      exchangeRate,
-      loan: loanDetails,
-      monthlySpend,
-      weeklySpend,
+      exchangeRate, rateSource, currentDate: localDateKey(), loan: loanDetails,
+      monthlyBudget: estimates.reduce((sum, item) => sum + item.amountGbp, 0),
+      monthlySpend: monthlyExpenses.reduce((sum, e) => sum + e.amountGbp, 0),
+      weeklySpend: lastSevenDaysExpenses(expenses).reduce((sum, e) => sum + e.amountGbp, 0),
       expensesByCategory,
-      recentExpenses: [...expenses].sort((a, b) => b.date.localeCompare(a.date)),
-      upcomingEvents,
-      savings
+      recentExpenses: [...expenses].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 20).map(({title, amountGbp, category, date}) => ({title, amountGbp, category, date})),
+      upcomingEvents: events.filter(e => e.date >= localDateKey()).sort((a, b) => a.date.localeCompare(b.date)).slice(0, 5).map(({title, category, date}) => ({title, category, date})),
+      savings: savings.slice(0, 50).map(({title, targetGbp, currentGbp}) => ({title, targetGbp, currentGbp})),
     };
   };
-
-  const handleSend = async (textToSend: string) => {
-    if (!textToSend.trim() || isLoading) return;
-
-    const userMessage: Message = { role: 'user', content: textToSend };
-    setMessages(prev => [...prev, userMessage]);
-    setInput('');
-    setIsLoading(true);
-
+  const handleSend = async (text: string, retry = false) => {
+    const content = text.trim();
+    if (!content || content.length > 2000 || requestRef.current) return;
+    const history = retry ? messages : [...messages, {role:'user' as const, content}];
+    if (!retry) setMessages(history.slice(-60));
+    setInput(''); setError(''); setNotice(''); setIsLoading(true); retryRef.current = content;
+    const controller = new AbortController();
+    requestRef.current = controller;
+    const timer = setTimeout(() => controller.abort('timeout'), 30000);
     try {
-      const payload = {
-        messages: [...messages, userMessage],
-        context: getContextPayload()
-      };
-
       const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        method:'POST', headers:{'Content-Type':'application/json'}, signal:controller.signal,
+        body:JSON.stringify({messages:history.slice(-30).map(({role,content}) => ({role,content:content.slice(0,4000)})), context:getContextPayload(), useCloudAI}),
       });
-
-      if (!response.ok) {
-        throw new Error('Chat API failed');
-      }
-
       const data = await response.json();
-      if (data.content) {
-        setMessages(prev => [...prev, { role: 'assistant', content: data.content }]);
-      } else {
-        throw new Error('Invalid chat response format');
-      }
-    } catch (error) {
-      console.error('Chat error:', error);
-      setMessages(prev => [
-        ...prev,
-        { role: 'assistant', content: 'Sorry, I encountered an error. Please try again later.' }
-      ]);
+      if (!response.ok) throw new Error(data.error || 'The companion could not answer. Try again.');
+      if (typeof data.content !== 'string' || !data.content.trim()) throw new Error('No answer was received. Try again.');
+      if (controller.signal.aborted) return;
+      setMessages(prev => [...prev, {role:'assistant',content:data.content,mode:data.mode === 'cloud' ? 'cloud' : 'local'}].slice(-60) as Message[]);
+      setNotice(data.notice || '');
+    } catch (err) {
+      if (controller.signal.reason === 'stopped' || controller.signal.reason === 'cleared') return;
+      setError(controller.signal.aborted ? 'That took too long. Please try again.' : err instanceof Error ? err.message : 'Connection failed. Please try again.');
     } finally {
-      setIsLoading(false);
+      clearTimeout(timer);
+      if (requestRef.current === controller) { requestRef.current = null; setIsLoading(false); inputRef.current?.focus(); }
     }
   };
-
-  // Quick Suggestion prompts from specification
-  const suggestions = [
-    'How much did I spend this month?',
-    'How much loan remains?',
-    'Convert £450 to INR',
-    'How much have I spent on food?'
-  ];
-
-  // React escapes text; never interpret user or model output as HTML.
-  const renderMessageContent = (text: string) => (
-    <div className="text-xs leading-relaxed select-text space-y-1">
-      {text.split('\n').map((line, index) => (
-        <div key={index} className={line.startsWith('### ') ? 'font-semibold' : 'min-h-4'}>
-          {line.replace(/^### /, '').split(/(\*\*.*?\*\*|\*[^*]+\*)/g).map((part, i) =>
-            part.startsWith('**') && part.endsWith('**') ? <strong key={i}>{part.slice(2, -2)}</strong> :
-            part.startsWith('*') && part.endsWith('*') ? <em key={i}>{part.slice(1, -1)}</em> : part
-          )}
-        </div>
-      ))}
-    </div>
-  );
+  const clearChat = () => {
+    requestRef.current?.abort('cleared'); requestRef.current = null;
+    setMessages([]); setError(''); setNotice(''); setInput(''); setIsLoading(false); retryRef.current = ''; inputRef.current?.focus();
+  };
 
   return (
-    <Card className="h-full select-none flex flex-col overflow-hidden">
-      <CardHeader className="flex flex-row items-center gap-2 pb-3 border-b border-zinc-150 dark:border-white/5 bg-zinc-100/50 dark:bg-zinc-900/10">
-        <Bot className="h-5 w-5 text-indigo-500 dark:text-indigo-400" />
-        <div>
-          <CardTitle className="flex items-center gap-1.5">
-            UKOS AI Companion <Sparkles className="h-3.5 w-3.5 text-indigo-500 dark:text-indigo-400 fill-indigo-500 dark:fill-indigo-400" />
-          </CardTitle>
-          <p className="text-[10px] text-zinc-500 mt-0.5">Contextual study-abroad & finance chatbot</p>
+    <Card className="h-full flex flex-col overflow-hidden">
+      <header className="flex items-center justify-between gap-3 p-4 border-b border-zinc-200 dark:border-white/5">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-500"><Bot className="h-5 w-5" /></div>
+          <div><h3 className="font-bold text-sm text-zinc-900 dark:text-white">UKOS AI Companion</h3><p className="text-[10px] text-zinc-500 mt-1">Budget clarity. Better plans.</p></div>
         </div>
-      </CardHeader>
-
-      {/* Messages Scroll Area */}
-      <div className="flex-1 overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-zinc-850 flex flex-col">
-        {/* Spacer to push short message histories to the bottom */}
-        <div className="flex-1" />
-        
-        <div className="space-y-3.5">
-          {messages.map((msg, index) => {
-            const isBot = msg.role === 'assistant';
-            return (
-              <div 
-                key={index} 
-                className={`flex gap-2.5 max-w-[85%] ${
-                  isBot ? 'mr-auto' : 'ml-auto flex-row-reverse'
-                }`}
-              >
-                {/* Profile icon bubble */}
-                <div className={`h-7 w-7 rounded-lg flex items-center justify-center shrink-0 border ${
-                  isBot 
-                    ? 'bg-indigo-600/10 border-indigo-500/20 text-indigo-600 dark:text-indigo-400' 
-                    : 'bg-zinc-200 dark:bg-zinc-800 border-zinc-300/50 dark:border-white/5 text-zinc-750 dark:text-zinc-300'
-                }`}>
-                  {isBot ? <Bot className="h-4 w-4" /> : <User className="h-4 w-4" />}
-                </div>
-
-                {/* Chat bubble body */}
-                <div className={`p-3 rounded-2xl border ${
-                  isBot 
-                    ? 'bg-zinc-50 dark:bg-zinc-900/40 border-zinc-200 dark:border-white/5 text-zinc-850 dark:text-zinc-100 rounded-tl-sm shadow-sm' 
-                    : 'bg-indigo-600 border-indigo-500 text-white rounded-tr-sm shadow-lg shadow-indigo-600/5'
-                }`}>
-                  {renderMessageContent(msg.content)}
-                </div>
-              </div>
-            );
-          })}
-
-          {/* Loading/Typing pulse state */}
-          {isLoading && (
-            <div className="flex gap-2.5 max-w-[85%] mr-auto">
-              <div className="h-7 w-7 rounded-lg flex items-center justify-center shrink-0 border bg-indigo-600/10 border-indigo-500/20 text-indigo-600 dark:text-indigo-400">
-                <Bot className="h-4 w-4" />
-              </div>
-              <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-white/5 text-zinc-500 dark:text-zinc-400 rounded-tl-sm flex items-center gap-1">
-                <span className="h-1.5 w-1.5 bg-zinc-400 dark:bg-zinc-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                <span className="h-1.5 w-1.5 bg-zinc-400 dark:bg-zinc-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                <span className="h-1.5 w-1.5 bg-zinc-400 dark:bg-zinc-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-              </div>
-            </div>
-          )}
-        </div>
-        <div ref={messagesEndRef} />
+        <button type="button" onClick={clearChat} disabled={!messages.length && !isLoading} aria-label="Start a new chat" title="Start a new chat" className="p-2 rounded-lg text-zinc-500 hover:bg-zinc-100 dark:hover:bg-white/5 disabled:opacity-30"><RotateCcw className="h-4 w-4" /></button>
+      </header>
+      <div className="px-4 py-2 border-b border-zinc-200 dark:border-white/5 flex items-center justify-between gap-2 text-[10px]">
+        <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400"><span className="w-1.5 h-1.5 rounded-full bg-current" /> Dashboard answers</span>
+        <span className="text-zinc-500">Chat stays in this tab</span>
       </div>
-
-      {/* Suggestion Chips and Input bottom panel */}
-      <div className="p-3 border-t border-zinc-150 dark:border-white/5 bg-zinc-50/50 dark:bg-zinc-900/10 space-y-2.5">
-        {/* Suggestion chips (only when chat is idle) */}
-        {!isLoading && (
-          <div className="flex gap-1.5 overflow-x-auto pb-1 select-none scrollbar-none">
-            {suggestions.map((s, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleSend(s)}
-                className="px-2.5 py-1 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-white/5 text-[9px] font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white rounded-lg whitespace-nowrap transition-colors"
-              >
-                {s}
-              </button>
-            ))}
+      <div role="log" aria-label="Companion conversation" aria-live="polite" aria-relevant="additions" className="flex-1 min-h-[260px] max-h-[400px] overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-zinc-800">
+        {!messages.length && <div className="py-4">
+          <Sparkles className="h-6 w-6 text-indigo-500 mb-3" />
+          <h4 className="font-bold text-zinc-900 dark:text-white">Make sense of your student life.</h4>
+          <p className="text-xs leading-relaxed text-zinc-500 mt-2 mb-5">Ask about recorded expenses, savings goals, loan estimates or deadlines. I can explain your numbers and help you plan your next step.</p>
+          <div className="grid grid-cols-2 gap-2">{suggestions.map(([label, prompt]) => <button key={label} onClick={() => handleSend(prompt)} className="flex items-center justify-between gap-2 p-3 text-left text-xs rounded-xl border border-zinc-200 dark:border-white/10 text-zinc-700 dark:text-zinc-300 hover:bg-indigo-500/10 hover:border-indigo-500/30"><span>{label}</span><ArrowUpRight className="h-3 w-3 shrink-0 text-indigo-500" /></button>)}</div>
+        </div>}
+        {messages.map((message, index) => <div key={index} className={`flex gap-2 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}>
+          <div className="shrink-0 h-6 w-6 rounded-lg flex items-center justify-center bg-indigo-500/10 text-indigo-500">{message.role === 'user' ? <User className="h-3.5 w-3.5" /> : <Bot className="h-3.5 w-3.5" />}</div>
+          <div className={`max-w-[88%] min-w-0 rounded-2xl p-3 ${message.role === 'user' ? 'bg-indigo-600 text-white rounded-tr-sm' : 'bg-zinc-100 dark:bg-white/5 text-zinc-800 dark:text-zinc-200 rounded-tl-sm'}`}>
+            <MessageContent text={message.content} />
+            {message.role === 'assistant' && <p className="mt-2.5 text-[9px] text-zinc-500">{message.mode === 'cloud' ? 'Cloud AI · verify important decisions' : 'Based on your recorded dashboard data'}</p>}
           </div>
-        )}
-
-        {/* Input box */}
-        <form 
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSend(input);
-          }}
-          className="flex gap-2"
-        >
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            aria-label="Ask AI Companion"
-            placeholder="Ask AI Companion..."
-            disabled={isLoading}
-            className="flex-1 bg-zinc-50 dark:bg-black/40 border border-zinc-200 dark:border-white/10 rounded-xl py-2 px-3 text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-indigo-500/50 disabled:opacity-50 placeholder-zinc-500 dark:placeholder-zinc-400"
-          />
-          <button
-            type="submit"
-            aria-label="Send message"
-            disabled={!input.trim() || isLoading}
-            className="p-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white rounded-xl transition-colors shadow-md shadow-indigo-600/10"
-          >
-            <Send className="h-3.5 w-3.5" />
-          </button>
+        </div>)}
+        {isLoading && <p role="status" className="text-xs text-indigo-500 animate-pulse">Checking your question…</p>}
+        <div ref={endRef} />
+      </div>
+      <div className="p-3 border-t border-zinc-200 dark:border-white/5 space-y-2.5">
+        {notice && <p role="status" className="text-xs text-amber-600 dark:text-amber-400">{notice}</p>}
+        {error && <div role="alert" className="flex items-center justify-between gap-2 rounded-lg bg-rose-500/10 p-2.5 text-xs text-rose-600 dark:text-rose-400"><span>{error}</span><button onClick={() => handleSend(retryRef.current, true)} className="font-bold underline shrink-0">Retry</button></div>}
+        {!!messages.length && !isLoading && !error && <div className="flex gap-2 overflow-x-auto pb-1">{suggestions.slice(0,4).map(([label,prompt]) => <button key={label} onClick={() => handleSend(prompt)} className="text-[10px] whitespace-nowrap text-zinc-500 hover:text-indigo-500 border border-zinc-200 dark:border-white/10 px-2 py-1 rounded-lg">{label}</button>)}</div>}
+        {cloudAvailable && <label className="flex items-start gap-2 text-[10px] text-zinc-500"><input type="checkbox" checked={useCloudAI} disabled={isLoading} onChange={e => setUseCloudAI(e.target.checked)} className="mt-0.5" /><span>Use cloud AI for broader questions. This shares this conversation and your budget, loan, savings and calendar summary with Google Gemini. Identity and document fields are excluded.</span></label>}
+        <form onSubmit={e => {e.preventDefault(); handleSend(input);}} className="flex gap-2">
+          <input ref={inputRef} type="text" aria-label="Ask AI Companion" value={input} maxLength={2000} onChange={e => setInput(e.target.value)} placeholder="Ask about your budget or next deadline…" disabled={isLoading || !!error} className="min-w-0 flex-1 rounded-xl border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-black/30 px-3 py-2.5 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50" />
+          {isLoading ? <button type="button" aria-label="Stop response" onClick={() => {requestRef.current?.abort('stopped'); setNotice('Response stopped. Start a new chat to remove the unanswered message.');}} className="p-2.5 rounded-xl bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300"><Square className="h-4 w-4" /></button> : <button type="submit" aria-label="Send message" disabled={!input.trim() || !!error} className="p-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white disabled:opacity-30"><Send className="h-4 w-4" /></button>}
         </form>
       </div>
     </Card>
