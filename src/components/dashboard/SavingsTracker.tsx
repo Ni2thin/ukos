@@ -82,11 +82,11 @@ export const SavingsTracker: React.FC<SavingsTrackerProps> = ({
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <div>
           <CardTitle>UK Savings Goal Tracker</CardTitle>
-          <p className="text-xs text-zinc-500 mt-1">Track funds for emergencies, travel, and reserve fees</p>
+          <p className="text-sm text-zinc-500 mt-1">Track funds for emergencies, travel, and reserve fees</p>
         </div>
         <button
           onClick={() => setIsAddOpen(true)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-md shadow-indigo-600/10"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-md shadow-indigo-600/10"
         >
           <Plus className="h-3.5 w-3.5" /> Add Goal
         </button>
@@ -96,11 +96,11 @@ export const SavingsTracker: React.FC<SavingsTrackerProps> = ({
         {/* Master Savings Progress Bar */}
         <div className="p-4 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-white/5 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="space-y-1 text-center sm:text-left">
-            <span className="text-[10px] uppercase font-bold tracking-wider text-zinc-500">Overall Portfolio Progress</span>
+            <span className="text-xs uppercase font-bold tracking-wider text-zinc-500">Overall Portfolio Progress</span>
             <div className="text-xl font-black text-zinc-900 dark:text-white">
               £{totalSavedGbp.toLocaleString('en-GB')} / £{totalTargetGbp.toLocaleString('en-GB')}
             </div>
-            <p className="text-[10px] text-zinc-500 dark:text-zinc-400">
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
               Equivalent Value: ₹{Math.round(totalSavedGbp * exchangeRate).toLocaleString('en-IN')} Saved
             </p>
           </div>
@@ -121,16 +121,16 @@ export const SavingsTracker: React.FC<SavingsTrackerProps> = ({
                 {/* Title and stats */}
                 <div className="flex justify-between items-start">
                   <div>
-                    <span className="px-2 py-0.5 text-[8px] font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 border border-indigo-500/25 rounded uppercase">
+                    <span className="px-2 py-0.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 border border-indigo-500/25 rounded uppercase">
                       {goal.category}
                     </span>
-                    <h5 className="text-xs font-bold text-zinc-900 dark:text-white mt-1">{goal.title}</h5>
+                    <h5 className="text-sm font-bold text-zinc-900 dark:text-white mt-1">{goal.title}</h5>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs font-black text-zinc-900 dark:text-white">
+                    <span className="text-sm font-black text-zinc-900 dark:text-white">
                       £{goal.currentGbp} / £{goal.targetGbp}
                     </span>
-                    <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block">
+                    <span className="text-xs text-zinc-500 dark:text-zinc-400 block">
                       {pct}% Complete
                     </span>
                   </div>
@@ -149,13 +149,13 @@ export const SavingsTracker: React.FC<SavingsTrackerProps> = ({
                   <div className="flex gap-1">
                     <button
                       onClick={() => handleQuickSave(goal, 50)}
-                      className="px-2 py-1 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-white/5 rounded text-[9px] font-bold text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
+                      className="px-2 py-1 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-white/5 rounded text-xs font-bold text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
                     >
                       +£50
                     </button>
                     <button
                       onClick={() => handleQuickSave(goal, 100)}
-                      className="px-2 py-1 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-white/5 rounded text-[9px] font-bold text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
+                      className="px-2 py-1 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-white/5 rounded text-xs font-bold text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
                     >
                       +£100
                     </button>
@@ -164,13 +164,13 @@ export const SavingsTracker: React.FC<SavingsTrackerProps> = ({
                   <div className="flex gap-1.5">
                     <button
                       onClick={() => handleUpdateClick(goal, true)}
-                      className="px-2 py-1 bg-indigo-600 hover:bg-indigo-500 rounded text-[9px] font-bold text-white transition-colors"
+                      className="px-2 py-1 bg-indigo-600 hover:bg-indigo-500 rounded text-xs font-bold text-white transition-colors"
                     >
                       Deposit
                     </button>
                     <button
                       onClick={() => handleUpdateClick(goal, false)}
-                      className="px-2 py-1 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-white/5 rounded text-[9px] font-bold text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
+                      className="px-2 py-1 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-white/5 rounded text-xs font-bold text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
                     >
                       Withdraw
                     </button>
@@ -180,7 +180,7 @@ export const SavingsTracker: React.FC<SavingsTrackerProps> = ({
             );
           })}
           {goals.length === 0 && (
-            <div className="text-center text-xs text-zinc-500 py-10">No savings goals configured. Add one to begin!</div>
+            <div className="text-center text-sm text-zinc-500 py-10">No savings goals configured. Add one to begin!</div>
           )}
         </div>
       </CardContent>
@@ -189,7 +189,7 @@ export const SavingsTracker: React.FC<SavingsTrackerProps> = ({
       <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Create Savings Goal">
         <form onSubmit={handleAddGoalSubmit} className="space-y-4">
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Goal Title</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Goal Title</label>
             <input
               type="text"
               required
@@ -202,7 +202,7 @@ export const SavingsTracker: React.FC<SavingsTrackerProps> = ({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Target Amount (£ GBP)</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Target Amount (£ GBP)</label>
               <input
                 type="number"
                 required
@@ -214,7 +214,7 @@ export const SavingsTracker: React.FC<SavingsTrackerProps> = ({
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Category</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Category</label>
               <input
                 type="text"
                 required
@@ -248,7 +248,7 @@ export const SavingsTracker: React.FC<SavingsTrackerProps> = ({
       >
         <form onSubmit={handleUpdateSubmit} className="space-y-4">
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Amount (£ GBP)</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Amount (£ GBP)</label>
             <input
               type="number"
               required

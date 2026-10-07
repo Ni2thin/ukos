@@ -46,7 +46,7 @@ function MessageContent({text}: {text: string}) {
       blocks.push(<p key={i}><InlineText text={line} /></p>);
     }
   }
-  return <div className="text-xs leading-relaxed space-y-2.5 break-words select-text">{blocks}</div>;
+  return <div className="text-sm leading-relaxed space-y-2.5 break-words select-text">{blocks}</div>;
 }
 
 export const AIAssistant: React.FC<AIAssistantProps> = ({exchangeRate, rateSource, loanDetails, expenses, events, savings, estimates = []}) => {
@@ -117,42 +117,42 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({exchangeRate, rateSourc
   };
 
   return (
-    <Card className="h-full flex flex-col overflow-hidden">
+    <Card className="companion-card h-full flex flex-col overflow-hidden">
       <header className="flex items-center justify-between gap-3 p-4 border-b border-zinc-200 dark:border-white/5">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-500"><Bot className="h-5 w-5" /></div>
-          <div><h3 className="font-bold text-sm text-zinc-900 dark:text-white">UKOS AI Companion</h3><p className="text-[10px] text-zinc-500 mt-1">Budget clarity. Better plans.</p></div>
+          <div><h3 className="card-title text-zinc-900 dark:text-white">UKOS AI Companion</h3><p className="text-xs text-zinc-500 mt-1">Budget clarity. Better plans.</p></div>
         </div>
         <button type="button" onClick={clearChat} disabled={!messages.length && !isLoading} aria-label="Start a new chat" title="Start a new chat" className="p-2 rounded-lg text-zinc-500 hover:bg-zinc-100 dark:hover:bg-white/5 disabled:opacity-30"><RotateCcw className="h-4 w-4" /></button>
       </header>
-      <div className="px-4 py-2 border-b border-zinc-200 dark:border-white/5 flex items-center justify-between gap-2 text-[10px]">
+      <div className="px-4 py-2 border-b border-zinc-200 dark:border-white/5 flex items-center justify-between gap-2 text-xs">
         <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400"><span className="w-1.5 h-1.5 rounded-full bg-current" /> Dashboard answers</span>
         <span className="text-zinc-500">Chat stays in this tab</span>
       </div>
-      <div role="log" aria-label="Companion conversation" aria-live="polite" aria-relevant="additions" className="flex-1 min-h-[260px] max-h-[400px] overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-zinc-800">
+      <div role="log" aria-label="Companion conversation" aria-live="polite" aria-relevant="additions" className="flex-1 min-h-[320px] max-h-[480px] overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-zinc-800">
         {!messages.length && <div className="py-4">
           <Sparkles className="h-6 w-6 text-indigo-500 mb-3" />
           <h4 className="font-bold text-zinc-900 dark:text-white">Make sense of your student life.</h4>
-          <p className="text-xs leading-relaxed text-zinc-500 mt-2 mb-5">Ask about recorded expenses, savings goals, loan estimates or deadlines. I can explain your numbers and help you plan your next step.</p>
-          <div className="grid grid-cols-2 gap-2">{suggestions.map(([label, prompt]) => <button key={label} onClick={() => handleSend(prompt)} className="flex items-center justify-between gap-2 p-3 text-left text-xs rounded-xl border border-zinc-200 dark:border-white/10 text-zinc-700 dark:text-zinc-300 hover:bg-indigo-500/10 hover:border-indigo-500/30"><span>{label}</span><ArrowUpRight className="h-3 w-3 shrink-0 text-indigo-500" /></button>)}</div>
+          <p className="text-sm leading-relaxed text-zinc-500 mt-2 mb-5">Ask about recorded expenses, savings goals, loan estimates or deadlines. I can explain your numbers and help you plan your next step.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">{suggestions.map(([label, prompt]) => <button key={label} onClick={() => handleSend(prompt)} className="flex items-center justify-between gap-2 p-3 text-left text-sm rounded-xl border border-zinc-200 dark:border-white/10 text-zinc-700 dark:text-zinc-300 hover:bg-indigo-500/10 hover:border-indigo-500/30"><span>{label}</span><ArrowUpRight className="h-3 w-3 shrink-0 text-indigo-500" /></button>)}</div>
         </div>}
         {messages.map((message, index) => <div key={index} className={`flex gap-2 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}>
           <div className="shrink-0 h-6 w-6 rounded-lg flex items-center justify-center bg-indigo-500/10 text-indigo-500">{message.role === 'user' ? <User className="h-3.5 w-3.5" /> : <Bot className="h-3.5 w-3.5" />}</div>
           <div className={`max-w-[88%] min-w-0 rounded-2xl p-3 ${message.role === 'user' ? 'bg-indigo-600 text-white rounded-tr-sm' : 'bg-zinc-100 dark:bg-white/5 text-zinc-800 dark:text-zinc-200 rounded-tl-sm'}`}>
             <MessageContent text={message.content} />
-            {message.role === 'assistant' && <p className="mt-2.5 text-[9px] text-zinc-500">{message.mode === 'cloud' ? 'Cloud AI · verify important decisions' : 'Based on your recorded dashboard data'}</p>}
+            {message.role === 'assistant' && <p className="mt-2.5 text-xs text-zinc-500">{message.mode === 'cloud' ? 'Cloud AI · verify important decisions' : 'Based on your recorded dashboard data'}</p>}
           </div>
         </div>)}
-        {isLoading && <p role="status" className="text-xs text-indigo-500 animate-pulse">Checking your question…</p>}
+        {isLoading && <p role="status" className="text-sm text-indigo-500 animate-pulse">Checking your question…</p>}
         <div ref={endRef} />
       </div>
       <div className="p-3 border-t border-zinc-200 dark:border-white/5 space-y-2.5">
-        {notice && <p role="status" className="text-xs text-amber-600 dark:text-amber-400">{notice}</p>}
-        {error && <div role="alert" className="flex items-center justify-between gap-2 rounded-lg bg-rose-500/10 p-2.5 text-xs text-rose-600 dark:text-rose-400"><span>{error}</span><button onClick={() => handleSend(retryRef.current, true)} className="font-bold underline shrink-0">Retry</button></div>}
-        {!!messages.length && !isLoading && !error && <div className="flex gap-2 overflow-x-auto pb-1">{suggestions.slice(0,4).map(([label,prompt]) => <button key={label} onClick={() => handleSend(prompt)} className="text-[10px] whitespace-nowrap text-zinc-500 hover:text-indigo-500 border border-zinc-200 dark:border-white/10 px-2 py-1 rounded-lg">{label}</button>)}</div>}
-        {cloudAvailable && <label className="flex items-start gap-2 text-[10px] text-zinc-500"><input type="checkbox" checked={useCloudAI} disabled={isLoading} onChange={e => setUseCloudAI(e.target.checked)} className="mt-0.5" /><span>Use cloud AI for broader questions. This shares this conversation and your budget, loan, savings and calendar summary with Google Gemini. Identity and document fields are excluded.</span></label>}
+        {notice && <p role="status" className="text-sm text-amber-600 dark:text-amber-400">{notice}</p>}
+        {error && <div role="alert" className="flex items-center justify-between gap-2 rounded-lg bg-rose-500/10 p-2.5 text-sm text-rose-600 dark:text-rose-400"><span>{error}</span><button onClick={() => handleSend(retryRef.current, true)} className="font-bold underline shrink-0">Retry</button></div>}
+        {!!messages.length && !isLoading && !error && <div className="flex gap-2 overflow-x-auto pb-1">{suggestions.slice(0,4).map(([label,prompt]) => <button key={label} onClick={() => handleSend(prompt)} className="text-xs whitespace-nowrap text-zinc-500 hover:text-indigo-500 border border-zinc-200 dark:border-white/10 px-2 py-1 rounded-lg">{label}</button>)}</div>}
+        {cloudAvailable && <label className="flex items-start gap-2 text-xs text-zinc-500"><input type="checkbox" checked={useCloudAI} disabled={isLoading} onChange={e => setUseCloudAI(e.target.checked)} className="mt-0.5" /><span>Use cloud AI for broader questions. This shares this conversation and your budget, loan, savings and calendar summary with Google Gemini. Identity and document fields are excluded.</span></label>}
         <form onSubmit={e => {e.preventDefault(); handleSend(input);}} className="flex gap-2">
-          <input ref={inputRef} type="text" aria-label="Ask AI Companion" value={input} maxLength={2000} onChange={e => setInput(e.target.value)} placeholder="Ask about your budget or next deadline…" disabled={isLoading || !!error} className="min-w-0 flex-1 rounded-xl border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-black/30 px-3 py-2.5 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50" />
+          <input ref={inputRef} type="text" aria-label="Ask AI Companion" value={input} maxLength={2000} onChange={e => setInput(e.target.value)} placeholder="Ask about your budget or next deadline…" disabled={isLoading || !!error} className="min-w-0 flex-1 rounded-xl border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-black/30 px-3 py-2.5 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50" />
           {isLoading ? <button type="button" aria-label="Stop response" onClick={() => {requestRef.current?.abort('stopped'); setNotice('Response stopped. Start a new chat to remove the unanswered message.');}} className="p-2.5 rounded-xl bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300"><Square className="h-4 w-4" /></button> : <button type="submit" aria-label="Send message" disabled={!input.trim() || !!error} className="p-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white disabled:opacity-30"><Send className="h-4 w-4" /></button>}
         </form>
       </div>

@@ -22,11 +22,11 @@ export default function PlanningPage() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <header className="flex flex-col gap-1 select-none">
-        <h2 className="text-xl font-black text-zinc-900 dark:text-white tracking-tight">
+      <header className="page-header">
+        <h2 className="page-title">
           Savings & Cost Planning
         </h2>
-        <p className="text-xs text-zinc-500">
+        <p className="text-sm text-zinc-500">
           Configure financial goals for your UK journey and estimate your monthly living budget requirements
         </p>
       </header>

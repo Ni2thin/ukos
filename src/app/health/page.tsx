@@ -152,11 +152,11 @@ export default function HealthPage() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <header className="flex flex-col gap-1 select-none">
-        <h2 className="text-xl font-black text-zinc-900 dark:text-white tracking-tight">
+      <header className="page-header">
+        <h2 className="page-title">
           NHS GP & Medical Health Log
         </h2>
-        <p className="text-xs text-zinc-500">
+        <p className="text-sm text-zinc-500">
           UK health credentials dashboard. Keep track of GP surgery registrations, medical appointments, prescriptions, and emergencies
         </p>
       </header>
@@ -181,7 +181,7 @@ export default function HealthPage() {
                   setGpStatus(gpDetails.status);
                   setIsEditGPOpen(true);
                 }}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[10px] font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 hover:bg-indigo-500/20 transition-all"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 hover:bg-indigo-500/20 transition-all"
               >
                 <Edit3 className="h-3 w-3" /> Edit GP Info
               </button>
@@ -190,11 +190,11 @@ export default function HealthPage() {
               <div className="flex justify-between items-start">
                 <div className="space-y-0.5">
                   <h4 className="text-base font-black text-zinc-900 dark:text-white">{gpDetails.gpName || 'No Surgery Configured'}</h4>
-                  <span className="text-xs text-zinc-500 flex items-center gap-1">
+                  <span className="text-sm text-zinc-500 flex items-center gap-1">
                     <MapPin className="h-3.5 w-3.5" /> {gpDetails.gpAddress || 'N/A'}
                   </span>
                 </div>
-                <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-wide ${
+                <span className={`px-2 py-0.5 rounded text-xs font-black uppercase tracking-wide ${
                   gpDetails.status === 'Registered' 
                     ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' 
                     : gpDetails.status === 'Pending' 
@@ -206,11 +206,11 @@ export default function HealthPage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-2 border-t border-zinc-200/60 dark:border-white/5">
-                <div className="flex items-center gap-2.5 text-xs text-zinc-600 dark:text-zinc-300">
+                <div className="flex items-center gap-2.5 text-sm text-zinc-600 dark:text-zinc-300">
                   <Phone className="h-4 w-4 text-zinc-400" />
                   <span>Call: <strong className="font-bold text-zinc-900 dark:text-white">{gpDetails.gpPhone || 'N/A'}</strong></span>
                 </div>
-                <div className="flex items-center gap-2.5 text-xs text-zinc-600 dark:text-zinc-300">
+                <div className="flex items-center gap-2.5 text-sm text-zinc-600 dark:text-zinc-300">
                   <Mail className="h-4 w-4 text-zinc-400" />
                   <span>Email: <strong className="font-bold text-zinc-900 dark:text-white">{gpDetails.gpEmail || 'N/A'}</strong></span>
                 </div>
@@ -229,21 +229,21 @@ export default function HealthPage() {
               </div>
               <button 
                 onClick={() => setIsAddContactOpen(true)}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors"
               >
                 <Plus className="h-3 w-3" /> Add
               </button>
             </CardHeader>
             <CardContent className="space-y-3 py-4 max-h-[200px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-zinc-800">
               {emergencyContacts.length === 0 ? (
-                <div className="text-center text-xs text-zinc-500 py-6">No emergency contacts logged.</div>
+                <div className="text-center text-sm text-zinc-500 py-6">No emergency contacts logged.</div>
               ) : (
                 emergencyContacts.map(c => (
                   <div key={c.id} className="p-3 bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-white/5 rounded-xl flex justify-between items-start relative group">
                     <div className="space-y-0.5 min-w-0 flex-1">
-                      <span className="text-xs font-bold text-zinc-900 dark:text-white block">{c.name}</span>
-                      <span className="text-[9px] uppercase tracking-wider text-rose-500 font-bold block">{c.relationship}</span>
-                      <div className="flex flex-wrap gap-x-3 text-[10px] text-zinc-500 pt-0.5">
+                      <span className="text-sm font-bold text-zinc-900 dark:text-white block">{c.name}</span>
+                      <span className="text-xs uppercase tracking-wider text-rose-500 font-bold block">{c.relationship}</span>
+                      <div className="flex flex-wrap gap-x-3 text-xs text-zinc-500 pt-0.5">
                         <span>{c.phone}</span>
                         {c.email && <span>• {c.email}</span>}
                       </div>
@@ -276,14 +276,14 @@ export default function HealthPage() {
               </div>
               <button 
                 onClick={() => setIsAddPrescriptionOpen(true)}
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors"
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors"
               >
                 <Plus className="h-3.5 w-3.5" /> Log Medicine
               </button>
             </CardHeader>
             <CardContent className="space-y-3.5 py-4 max-h-[300px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-zinc-800">
               {prescriptions.length === 0 ? (
-                <div className="text-center text-xs text-zinc-500 py-10">No active prescriptions logged.</div>
+                <div className="text-center text-sm text-zinc-500 py-10">No active prescriptions logged.</div>
               ) : (
                 prescriptions.map(p => (
                   <div key={p.id} className="p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-white/5 space-y-1 relative group">
@@ -296,17 +296,17 @@ export default function HealthPage() {
 
                     <div className="flex justify-between items-start pr-4">
                       <div>
-                        <span className="text-xs font-bold text-zinc-900 dark:text-white block">{p.name}</span>
-                        <span className="text-[10px] text-indigo-500 font-semibold">{p.dosage} — {p.frequency}</span>
+                        <span className="text-sm font-bold text-zinc-900 dark:text-white block">{p.name}</span>
+                        <span className="text-xs text-indigo-500 font-semibold">{p.dosage} — {p.frequency}</span>
                       </div>
                       {p.repeat && (
-                        <span className="px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[8px] font-bold uppercase tracking-wider">
+                        <span className="px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider">
                           Repeat
                         </span>
                       )}
                     </div>
                     {p.notes && (
-                      <p className="text-[9px] text-zinc-500 dark:text-zinc-400 pt-1 leading-relaxed border-t border-zinc-200/40 dark:border-white/5 mt-1.5">
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 pt-1 leading-relaxed border-t border-zinc-200/40 dark:border-white/5 mt-1.5">
                         {p.notes}
                       </p>
                     )}
@@ -327,14 +327,14 @@ export default function HealthPage() {
               </div>
               <button 
                 onClick={() => setIsAddAppointmentOpen(true)}
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors"
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors"
               >
                 <Plus className="h-3.5 w-3.5" /> Schedule
               </button>
             </CardHeader>
             <CardContent className="space-y-3.5 py-4 max-h-[300px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-zinc-800">
               {appointments.length === 0 ? (
-                <div className="text-center text-xs text-zinc-500 py-10">No upcoming clinical appointments scheduled.</div>
+                <div className="text-center text-sm text-zinc-500 py-10">No upcoming clinical appointments scheduled.</div>
               ) : (
                 appointments.map(a => (
                   <div key={a.id} className="p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-white/5 space-y-2 relative group">
@@ -347,22 +347,22 @@ export default function HealthPage() {
 
                     <div className="flex justify-between items-start">
                       <div className="space-y-0.5">
-                        <span className="text-[8px] uppercase font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                        <span className="text-xs uppercase font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400">
                           {a.provider}
                         </span>
-                        <span className="text-xs font-bold text-zinc-900 dark:text-white block pt-1">{a.doctor}</span>
+                        <span className="text-sm font-bold text-zinc-900 dark:text-white block pt-1">{a.doctor}</span>
                       </div>
                       <div className="text-right">
-                        <span className="text-xs font-black text-zinc-900 dark:text-white block flex items-center gap-1 justify-end">
+                        <span className="text-sm font-black text-zinc-900 dark:text-white block flex items-center gap-1 justify-end">
                           <Calendar className="h-3 w-3 text-zinc-400" /> {a.date}
                         </span>
-                        <span className="text-[9px] text-zinc-400 flex items-center gap-1 justify-end">
+                        <span className="text-xs text-zinc-400 flex items-center gap-1 justify-end">
                           <Clock className="h-3 w-3" /> {a.time}
                         </span>
                       </div>
                     </div>
 
-                    <div className="pt-2 border-t border-zinc-200/60 dark:border-white/5 text-[9px] text-zinc-550 dark:text-zinc-400 leading-normal">
+                    <div className="pt-2 border-t border-zinc-200/60 dark:border-white/5 text-xs text-zinc-550 dark:text-zinc-400 leading-normal">
                       <div><strong>Reason:</strong> {a.reason}</div>
                       {a.notes && <div className="mt-0.5"><strong>Notes:</strong> {a.notes}</div>}
                     </div>
@@ -379,7 +379,7 @@ export default function HealthPage() {
       <Modal isOpen={isEditGPOpen} onClose={() => setIsEditGPOpen(false)} title="Update GP Surgery Info">
         <form onSubmit={handleUpdateGP} className="space-y-4">
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">GP Surgery Name</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">GP Surgery Name</label>
             <input
               type="text"
               required
@@ -391,7 +391,7 @@ export default function HealthPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Surgery Address</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Surgery Address</label>
             <input
               type="text"
               required
@@ -403,7 +403,7 @@ export default function HealthPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Surgery Phone Number</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Surgery Phone Number</label>
               <input
                 type="text"
                 value={gpPhone}
@@ -412,7 +412,7 @@ export default function HealthPage() {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Registration Status</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Registration Status</label>
               <select
                 value={gpStatus}
                 onChange={e => setGpStatus(e.target.value as any)}
@@ -426,7 +426,7 @@ export default function HealthPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">NHS GP Email (Optional)</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">NHS GP Email (Optional)</label>
             <input
               type="email"
               value={gpEmail}
@@ -450,7 +450,7 @@ export default function HealthPage() {
       <Modal isOpen={isAddPrescriptionOpen} onClose={() => setIsAddPrescriptionOpen(false)} title="Log New Prescription">
         <form onSubmit={handleAddPrescription} className="space-y-4">
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Medicine Name</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Medicine Name</label>
             <input
               type="text"
               required
@@ -463,7 +463,7 @@ export default function HealthPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Dosage Amount</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Dosage Amount</label>
               <input
                 type="text"
                 required
@@ -474,7 +474,7 @@ export default function HealthPage() {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Frequency</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Frequency</label>
               <input
                 type="text"
                 required
@@ -494,13 +494,13 @@ export default function HealthPage() {
               onChange={e => setPRepeat(e.target.checked)}
               className="rounded border-zinc-200 dark:border-white/10 text-indigo-600 focus:ring-indigo-500"
             />
-            <label htmlFor="repeat" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 cursor-pointer">
+            <label htmlFor="repeat" className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 cursor-pointer">
               Is this a Repeat Prescription? (Requires regular re-order)
             </label>
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Medication Notes</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Medication Notes</label>
             <textarea
               value={pNotes}
               onChange={e => setPNotes(e.target.value)}
@@ -526,7 +526,7 @@ export default function HealthPage() {
         <form onSubmit={handleAddAppointment} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Clinical Provider</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Clinical Provider</label>
               <select
                 value={apptProvider}
                 onChange={e => setApptProvider(e.target.value as any)}
@@ -539,7 +539,7 @@ export default function HealthPage() {
               </select>
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Doctor/Dentist Name</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Doctor/Dentist Name</label>
               <input
                 type="text"
                 required
@@ -553,7 +553,7 @@ export default function HealthPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Appointment Date</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Appointment Date</label>
               <input
                 type="date"
                 required
@@ -563,7 +563,7 @@ export default function HealthPage() {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Appointment Time</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Appointment Time</label>
               <input
                 type="time"
                 required
@@ -575,7 +575,7 @@ export default function HealthPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Reason for Visit</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Reason for Visit</label>
             <input
               type="text"
               required
@@ -587,7 +587,7 @@ export default function HealthPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Additional Instructions</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Additional Instructions</label>
             <textarea
               value={apptNotes}
               onChange={e => setApptNotes(e.target.value)}
@@ -613,7 +613,7 @@ export default function HealthPage() {
         <form onSubmit={handleAddContact} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Full Name</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Full Name</label>
               <input
                 type="text"
                 required
@@ -624,7 +624,7 @@ export default function HealthPage() {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Relationship</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Relationship</label>
               <input
                 type="text"
                 required
@@ -638,7 +638,7 @@ export default function HealthPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Phone Number</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Phone Number</label>
               <input
                 type="text"
                 required
@@ -649,7 +649,7 @@ export default function HealthPage() {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Email Address (Optional)</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Email Address (Optional)</label>
               <input
                 type="email"
                 value={cEmail}

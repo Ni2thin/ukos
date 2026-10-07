@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const satoshi = localFont({src: [
+  {path: "../../public/fonts/satoshi-regular.woff2", weight: "400"},
+  {path: "../../public/fonts/satoshi-medium.woff2", weight: "500"},
+  {path: "../../public/fonts/satoshi-bold.woff2", weight: "700"},
+], variable: "--font-satoshi", display: "swap"});
+const display = localFont({src: "../../public/fonts/staatliches.ttf", variable: "--font-display", display: "swap"});
+const editorial = localFont({src: "../../public/fonts/stint-ultra-condensed.ttf", variable: "--font-editorial", display: "swap"});
 
 export const metadata: Metadata = {
   title: "UKOS — Personal Operating System for UK Student Life",
@@ -27,7 +25,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${satoshi.variable} ${display.variable} ${editorial.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <AppShell>{children}</AppShell>

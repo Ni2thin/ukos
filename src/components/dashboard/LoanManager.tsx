@@ -105,18 +105,18 @@ export const LoanManager: React.FC<LoanManagerProps> = ({
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <div>
           <CardTitle>Education Loan Command Center</CardTitle>
-          <p className="text-xs text-zinc-500 mt-1">₹40L SBI Student Loan Management & Tracker</p>
+          <p className="text-sm text-zinc-500 mt-1">₹40L SBI Student Loan Management & Tracker</p>
         </div>
         <div className="flex gap-2">
           <button
             onClick={() => setIsEditDetailsOpen(true)}
-            className="px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-white/10 hover:border-zinc-300 dark:hover:border-white/20 text-xs font-semibold text-zinc-650 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900/40 dark:hover:bg-zinc-800/40 transition-colors"
+            className="px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-white/10 hover:border-zinc-300 dark:hover:border-white/20 text-sm font-semibold text-zinc-650 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900/40 dark:hover:bg-zinc-800/40 transition-colors"
           >
             Edit Loan Parameters
           </button>
           <button
             onClick={() => setIsAddTxOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-md shadow-indigo-600/10"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-md shadow-indigo-600/10"
           >
             <Plus className="h-3.5 w-3.5" /> Log Payment
           </button>
@@ -130,13 +130,13 @@ export const LoanManager: React.FC<LoanManagerProps> = ({
             </div>
             <div className="space-y-1 max-w-sm">
               <h4 className="text-sm font-bold text-zinc-900 dark:text-white">No Sanctioned Education Loan</h4>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-normal">
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-normal">
                 Your loan principal is currently set to ₹0. Once your education loan is approved or sanctioned, click the "Edit Loan Parameters" button above to configure EMI trackers and interest schedules.
               </p>
             </div>
             <button
               onClick={() => setIsEditDetailsOpen(true)}
-              className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-xs font-bold text-white transition-colors shadow-md shadow-indigo-600/10"
+              className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-sm font-bold text-white transition-colors shadow-md shadow-indigo-600/10"
             >
               Configure Loan Parameters
             </button>
@@ -146,30 +146,30 @@ export const LoanManager: React.FC<LoanManagerProps> = ({
             {/* Row 1: Loan Overview */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="p-4 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-white/5 rounded-2xl flex flex-col justify-between">
-                <span className="text-xs text-zinc-500 dark:text-zinc-400 font-semibold">Total Borrowed</span>
+                <span className="text-sm text-zinc-500 dark:text-zinc-400 font-semibold">Total Borrowed</span>
                 <div className="mt-2">
                   <span className="text-2xl font-black text-zinc-900 dark:text-white">₹{loanDetails.loanAmountInr.toLocaleString('en-IN')}</span>
-                  <p className="text-[10px] text-zinc-500 dark:text-zinc-400 mt-1">
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
                     Interest: {loanDetails.interestRate}% • {loanDetails.tenureYears} Years
                   </p>
                 </div>
               </div>
 
               <div className="p-4 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-white/5 rounded-2xl flex flex-col justify-between">
-                <span className="text-xs text-zinc-500 dark:text-zinc-400 font-semibold">Amount Repaid</span>
+                <span className="text-sm text-zinc-500 dark:text-zinc-400 font-semibold">Amount Repaid</span>
                 <div className="mt-2">
                   <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400">₹{loanDetails.amountRepaidInr.toLocaleString('en-IN')}</span>
-                  <p className="text-[10px] text-zinc-500 dark:text-zinc-400 mt-1">
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
                     From {transactions.length} installments & extra logs
                   </p>
                 </div>
               </div>
 
               <div className="p-4 bg-indigo-500/10 dark:bg-indigo-950/20 border border-indigo-500/20 dark:border-indigo-500/10 rounded-2xl flex flex-col justify-between">
-                <span className="text-xs text-indigo-600 dark:text-indigo-300 font-semibold">Net Outstanding</span>
+                <span className="text-sm text-indigo-600 dark:text-indigo-300 font-semibold">Net Outstanding</span>
                 <div className="mt-2">
                   <span className="text-2xl font-black text-amber-600 dark:text-amber-500">₹{outstandingInr.toLocaleString('en-IN')}</span>
-                  <p className="text-xs font-bold text-indigo-600 dark:text-indigo-400 mt-1">
+                  <p className="text-sm font-bold text-indigo-600 dark:text-indigo-400 mt-1">
                     £{Math.round(outstandingGbp).toLocaleString('en-GB')}
                   </p>
                 </div>
@@ -178,7 +178,7 @@ export const LoanManager: React.FC<LoanManagerProps> = ({
 
             {/* Repayment progress bar */}
             <div className="space-y-2">
-              <div className="flex justify-between items-center text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+              <div className="flex justify-between items-center text-sm font-semibold text-zinc-500 dark:text-zinc-400">
                 <span>Repayment Progress</span>
                 <span className="text-indigo-650 dark:text-indigo-400">{repaidPercent}% Paid</span>
               </div>
@@ -201,7 +201,7 @@ export const LoanManager: React.FC<LoanManagerProps> = ({
                 {/* Inputs sliders */}
                 <div className="space-y-3">
                   <div className="space-y-1">
-                    <div className="flex justify-between text-xs font-medium">
+                    <div className="flex justify-between text-sm font-medium">
                       <span className="text-zinc-500 dark:text-zinc-400">Principal</span>
                       <span className="text-zinc-900 dark:text-white font-bold">₹{(emiLoan / 100000).toFixed(1)}L</span>
                     </div>
@@ -217,7 +217,7 @@ export const LoanManager: React.FC<LoanManagerProps> = ({
                   </div>
 
                   <div className="space-y-1">
-                    <div className="flex justify-between text-xs font-medium">
+                    <div className="flex justify-between text-sm font-medium">
                       <span className="text-zinc-500 dark:text-zinc-400">Interest Rate</span>
                       <span className="text-zinc-900 dark:text-white font-bold">{emiRate}%</span>
                     </div>
@@ -233,7 +233,7 @@ export const LoanManager: React.FC<LoanManagerProps> = ({
                   </div>
 
                   <div className="space-y-1">
-                    <div className="flex justify-between text-xs font-medium">
+                    <div className="flex justify-between text-sm font-medium">
                       <span className="text-zinc-500 dark:text-zinc-400">Tenure</span>
                       <span className="text-zinc-900 dark:text-white font-bold">{emiTenure} Years</span>
                     </div>
@@ -252,11 +252,11 @@ export const LoanManager: React.FC<LoanManagerProps> = ({
                 {/* Output Display */}
                 <div className="p-3 bg-zinc-100 dark:bg-zinc-900/60 rounded-xl border border-zinc-200 dark:border-white/5 flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-400 block">Monthly EMI</span>
+                    <span className="text-xs uppercase font-bold text-zinc-500 dark:text-zinc-400 block">Monthly EMI</span>
                     <span className="text-lg font-black text-indigo-600 dark:text-indigo-400">₹{calculatedEmi.inr.toLocaleString('en-IN')}</span>
                   </div>
                   <div className="text-right">
-                    <span className="text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-400 block">Equivalent GBP</span>
+                    <span className="text-xs uppercase font-bold text-zinc-500 dark:text-zinc-400 block">Equivalent GBP</span>
                     <span className="text-sm font-black text-zinc-900 dark:text-white">£{calculatedEmi.gbp.toLocaleString('en-GB')}</span>
                   </div>
                 </div>
@@ -270,18 +270,18 @@ export const LoanManager: React.FC<LoanManagerProps> = ({
 
                 <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 scrollbar-thin scrollbar-thumb-zinc-850">
                   {transactions.length === 0 ? (
-                    <div className="text-center text-xs text-zinc-500 py-8">No payments logged yet.</div>
+                    <div className="text-center text-sm text-zinc-500 py-8">No payments logged yet.</div>
                   ) : (
                     transactions.map((tx) => (
                       <div key={tx.id} className="flex justify-between items-center p-2.5 rounded-xl bg-zinc-100/50 dark:bg-zinc-950/30 border border-zinc-200 dark:border-white/5 group duration-200 hover:border-indigo-500/20">
                         <div>
-                          <span className="text-xs font-semibold text-zinc-900 dark:text-white block">{tx.type} Payment</span>
-                          <span className="text-[10px] text-zinc-500 dark:text-zinc-400">{tx.date}</span>
+                          <span className="text-sm font-semibold text-zinc-900 dark:text-white block">{tx.type} Payment</span>
+                          <span className="text-xs text-zinc-500 dark:text-zinc-400">{tx.date}</span>
                         </div>
                         <div className="flex items-center gap-3.5">
                           <div className="text-right">
-                            <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 block">- ₹{tx.amountInr.toLocaleString('en-IN')}</span>
-                            <span className="text-[10px] text-zinc-500 dark:text-zinc-400">~ £{tx.amountGbp}</span>
+                            <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400 block">- ₹{tx.amountInr.toLocaleString('en-IN')}</span>
+                            <span className="text-xs text-zinc-500 dark:text-zinc-400">~ £{tx.amountGbp}</span>
                           </div>
                           <button
                             onClick={() => onDeleteTransaction(tx.id)}
@@ -305,7 +305,7 @@ export const LoanManager: React.FC<LoanManagerProps> = ({
       <Modal isOpen={isAddTxOpen} onClose={() => setIsAddTxOpen(false)} title="Log Loan Repayment">
         <form onSubmit={handleSubmitTx} className="space-y-4">
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Repayment Amount (INR)</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Repayment Amount (INR)</label>
             <div className="relative">
               <span className="absolute left-3 top-2 text-sm text-zinc-500 font-semibold">₹</span>
               <input
@@ -320,7 +320,7 @@ export const LoanManager: React.FC<LoanManagerProps> = ({
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Payment Category / Type</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Payment Category / Type</label>
             <select
               value={txType}
               onChange={(e) => setTxType(e.target.value as any)}
@@ -346,7 +346,7 @@ export const LoanManager: React.FC<LoanManagerProps> = ({
       <Modal isOpen={isEditDetailsOpen} onClose={() => setIsEditDetailsOpen(false)} title="Configure Loan Settings">
         <form onSubmit={handleSaveDetails} className="space-y-4">
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Sanctioned Loan Principal (INR)</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Sanctioned Loan Principal (INR)</label>
             <input
               type="number"
               required
@@ -357,7 +357,7 @@ export const LoanManager: React.FC<LoanManagerProps> = ({
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Annual Interest Rate (%)</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Annual Interest Rate (%)</label>
             <input
               type="number"
               step="0.01"
@@ -369,7 +369,7 @@ export const LoanManager: React.FC<LoanManagerProps> = ({
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Tenure (Years)</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Tenure (Years)</label>
             <input
               type="number"
               required
@@ -380,7 +380,7 @@ export const LoanManager: React.FC<LoanManagerProps> = ({
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Amount Repaid Already (INR)</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Amount Repaid Already (INR)</label>
             <input
               type="number"
               required

@@ -50,3 +50,9 @@ The cloud route requires application authentication and deployment rate limiting
 Open **Backup & Sync** in the sidebar to export a JSON backup, preview and restore one, review the snapshot from before a restore, or recover deleted entries. All record collections and uploaded document content are included; backups contain sensitive data and are not encrypted.
 
 Cloud sync is local-first, account-scoped, and backed by revision checks and a durable retry queue. It requires a Supabase project. Follow [supabase/SETUP.md](supabase/SETUP.md) to configure the database migration, Email authentication and public environment variables. No Supabase project is currently configured, so live sign-in, RLS and multi-device sync still require activation and verification.
+
+### Editorial UI redesign
+
+The October 2026 redesign uses locally served Satoshi, Staatliches and Stint Ultra Condensed fonts, a navy/blue palette, readable labels, simpler navigation, a mobile quick dock, three Home money summaries, and reduced-motion support. Light mode is retained. Font sources and licenses are recorded in `public/fonts/`.
+
+The redesign is isolated in the `checkpoint-editorial-ui` commit/tag. To undo it without rewriting history, run `git revert checkpoint-editorial-ui`, then push the resulting revert commit. The preceding backup/sync checkpoint remains `checkpoint-backup-sync`.

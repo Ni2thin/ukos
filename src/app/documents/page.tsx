@@ -24,11 +24,11 @@ export default function DocumentsPage() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <header className="flex flex-col gap-1 select-none">
-        <h2 className="text-xl font-black text-zinc-900 dark:text-white tracking-tight">
+      <header className="page-header">
+        <h2 className="page-title">
           Knowledge & File Vault
         </h2>
-        <p className="text-xs text-zinc-500">
+        <p className="text-sm text-zinc-500">
           Maintain your university notes checklist, register Prof details and securely back up visa and passport credentials
         </p>
       </header>

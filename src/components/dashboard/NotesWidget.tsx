@@ -40,7 +40,7 @@ const MarkdownPreview: React.FC<{ content: string }> = ({ content }) => {
       } 
       // Bullet lists
       else if (line.trim().startsWith('- ') || line.trim().startsWith('* ')) {
-        if (!inList) { html += '<ul class="list-disc pl-5 space-y-1.5 text-xs text-zinc-700 dark:text-zinc-300 my-2">'; inList = true; }
+        if (!inList) { html += '<ul class="list-disc pl-5 space-y-1.5 text-sm text-zinc-700 dark:text-zinc-300 my-2">'; inList = true; }
         const itemContent = line.trim().substring(2);
         html += `<li>${parseInlineMarkdown(itemContent)}</li>`;
       } 
@@ -48,7 +48,7 @@ const MarkdownPreview: React.FC<{ content: string }> = ({ content }) => {
       else if (line.trim().startsWith('> ')) {
         if (inList) { html += '</ul>'; inList = false; }
         const quoteContent = line.trim().substring(2);
-        html += `<blockquote class="border-l-2 border-indigo-500 pl-3 italic text-zinc-600 dark:text-zinc-400 my-3 text-xs">${parseInlineMarkdown(quoteContent)}</blockquote>`;
+        html += `<blockquote class="border-l-2 border-indigo-500 pl-3 italic text-zinc-600 dark:text-zinc-400 my-3 text-sm">${parseInlineMarkdown(quoteContent)}</blockquote>`;
       }
       // Empty line
       else if (line.trim() === '') {
@@ -58,7 +58,7 @@ const MarkdownPreview: React.FC<{ content: string }> = ({ content }) => {
       // Normal paragraph
       else {
         if (inList) { html += '</ul>'; inList = false; }
-        html += `<p class="text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed my-2">${parseInlineMarkdown(line)}</p>`;
+        html += `<p class="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed my-2">${parseInlineMarkdown(line)}</p>`;
       }
     }
     if (inList) html += '</ul>';
@@ -81,7 +81,7 @@ function parseInlineMarkdown(text: string): string {
   // Italic *text*
   formatted = formatted.replace(/\*(.*?)\*/g, '<em class="italic text-zinc-700 dark:text-zinc-200">$1</em>');
   // Inline code `code`
-  formatted = formatted.replace(/`(.*?)`/g, '<code class="bg-zinc-100 dark:bg-black/50 px-1 rounded text-pink-600 dark:text-pink-400 font-mono text-[10px]">$1</code>');
+  formatted = formatted.replace(/`(.*?)`/g, '<code class="bg-zinc-100 dark:bg-black/50 px-1 rounded text-pink-600 dark:text-pink-400 font-mono text-xs">$1</code>');
   return formatted;
 }
 
@@ -168,11 +168,11 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <div>
           <CardTitle>UKOS Knowledge Notebook</CardTitle>
-          <p className="text-xs text-zinc-500 mt-1">Markdown-supported notes and checklists</p>
+          <p className="text-sm text-zinc-500 mt-1">Markdown-supported notes and checklists</p>
         </div>
         <button
           onClick={() => setIsAddOpen(true)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-md shadow-indigo-600/10"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-md shadow-indigo-600/10"
         >
           <Plus className="h-3.5 w-3.5" /> New Note
         </button>
@@ -186,12 +186,12 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
               const catNotes = notes.filter(n => n.category === cat);
               return (
                 <div key={cat} className="space-y-1.5">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 px-2 block">
+                  <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 px-2 block">
                     {cat}
                   </span>
                   
                   {catNotes.length === 0 ? (
-                    <span className="text-[10px] text-zinc-600 italic px-2 block">No notes</span>
+                    <span className="text-xs text-zinc-600 italic px-2 block">No notes</span>
                   ) : (
                     catNotes.map((note) => (
                       <div
@@ -206,7 +206,7 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
                             : 'text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-white/5 hover:text-zinc-950 dark:hover:text-white border border-transparent'
                         }`}
                       >
-                        <span className="text-xs truncate max-w-[120px]">{note.title}</span>
+                        <span className="text-sm truncate max-w-[120px]">{note.title}</span>
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -237,10 +237,10 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
                         type="text"
                         value={noteTitle}
                         onChange={(e) => setNoteTitle(e.target.value)}
-                        className="bg-zinc-50 dark:bg-black/40 border border-zinc-200 dark:border-white/10 rounded px-2 py-0.5 text-xs text-zinc-900 dark:text-white focus:outline-none"
+                        className="bg-zinc-50 dark:bg-black/40 border border-zinc-200 dark:border-white/10 rounded px-2 py-0.5 text-sm text-zinc-900 dark:text-white focus:outline-none"
                       />
                     ) : (
-                      <span className="text-xs font-bold text-zinc-900 dark:text-white">{activeNote.title}</span>
+                      <span className="text-sm font-bold text-zinc-900 dark:text-white">{activeNote.title}</span>
                     )}
                   </div>
                   <div className="flex items-center gap-2">
@@ -249,7 +249,7 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
                         <select
                           value={noteCategory}
                           onChange={(e) => setNoteCategory(e.target.value as any)}
-                          className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-white/10 rounded px-1.5 py-0.5 text-[10px] text-zinc-900 dark:text-white focus:outline-none"
+                          className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-white/10 rounded px-1.5 py-0.5 text-xs text-zinc-900 dark:text-white focus:outline-none"
                         >
                           <option value="UK Life">UK Life</option>
                           <option value="University">University</option>
@@ -257,7 +257,7 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
                         </select>
                         <button
                           onClick={handleSave}
-                          className="flex items-center gap-1 px-2.5 py-1 rounded bg-indigo-600 hover:bg-indigo-500 text-[10px] font-bold text-white transition-colors"
+                          className="flex items-center gap-1 px-2.5 py-1 rounded bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white transition-colors"
                         >
                           <Check className="h-3 w-3" /> Save
                         </button>
@@ -265,7 +265,7 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
                     ) : (
                       <button
                         onClick={() => setIsEditMode(true)}
-                        className="flex items-center gap-1 px-2.5 py-1 rounded bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-[10px] font-bold text-zinc-700 dark:text-zinc-300 hover:text-zinc-955 dark:hover:text-white transition-colors"
+                        className="flex items-center gap-1 px-2.5 py-1 rounded bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-xs font-bold text-zinc-700 dark:text-zinc-300 hover:text-zinc-955 dark:hover:text-white transition-colors"
                       >
                         <Edit3 className="h-3 w-3" /> Edit Note
                       </button>
@@ -280,7 +280,7 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
                       value={noteContent}
                       onChange={(e) => setNoteContent(e.target.value)}
                       placeholder="Write markdown here..."
-                      className="w-full h-full bg-transparent text-xs text-zinc-800 dark:text-zinc-300 font-mono resize-none focus:outline-none"
+                      className="w-full h-full bg-transparent text-sm text-zinc-800 dark:text-zinc-300 font-mono resize-none focus:outline-none"
                     />
                   ) : (
                     <MarkdownPreview content={activeNote.content} />
@@ -288,7 +288,7 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center h-full text-zinc-500 text-xs">
+              <div className="flex flex-col items-center justify-center h-full text-zinc-500 text-sm">
                 <FileCheck className="h-10 w-10 text-zinc-600 mb-2" />
                 Select or create a note to begin.
               </div>
@@ -301,7 +301,7 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
       <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Create New Note">
         <form onSubmit={handleCreateNote} className="space-y-4">
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Note Title</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Note Title</label>
             <input
               type="text"
               required
@@ -313,7 +313,7 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Category</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Category</label>
             <select
               value={newCategory}
               onChange={(e) => setNewCategory(e.target.value as any)}

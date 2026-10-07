@@ -82,11 +82,11 @@ export const ExpenseTracker: React.FC<ExpenseTrackerProps> = ({
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <div>
           <CardTitle>UK Expense Command & Logger</CardTitle>
-          <p className="text-xs text-zinc-500 mt-1">Multi-currency (GBP/INR) transaction tracker</p>
+          <p className="text-sm text-zinc-500 mt-1">Multi-currency (GBP/INR) transaction tracker</p>
         </div>
         <button
           onClick={() => setIsAddOpen(true)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-md shadow-indigo-600/10"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-md shadow-indigo-600/10"
         >
           <Plus className="h-3.5 w-3.5" /> Log Expense
         </button>
@@ -96,10 +96,10 @@ export const ExpenseTracker: React.FC<ExpenseTrackerProps> = ({
         {/* Weekly Summary Row */}
         <div className="p-4 bg-indigo-500/10 dark:bg-indigo-950/20 border border-indigo-500/20 dark:border-indigo-500/10 rounded-2xl space-y-3">
           <div className="flex justify-between items-center border-b border-indigo-500/20 dark:border-indigo-500/10 pb-2">
-            <span className="text-xs font-bold text-indigo-600 dark:text-indigo-300">Weekly Spend (Last 7 Days)</span>
+            <span className="text-sm font-bold text-indigo-600 dark:text-indigo-300">Weekly Spend (Last 7 Days)</span>
             <div className="text-right">
               <span className="text-sm font-black text-zinc-900 dark:text-white block">£{weeklySummary.totalGbp.toFixed(2)}</span>
-              <span className="text-[10px] text-indigo-600 dark:text-indigo-400">₹{Math.round(weeklySummary.totalGbp * exchangeRate).toLocaleString('en-IN')}</span>
+              <span className="text-xs text-indigo-600 dark:text-indigo-400">₹{Math.round(weeklySummary.totalGbp * exchangeRate).toLocaleString('en-IN')}</span>
             </div>
           </div>
           
@@ -109,14 +109,14 @@ export const ExpenseTracker: React.FC<ExpenseTrackerProps> = ({
               if (val === 0) return null;
               return (
                 <div key={cat} className="p-2 bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-white/5 rounded-xl">
-                  <span className="text-[9px] font-bold text-zinc-500 dark:text-zinc-400 block uppercase tracking-wider">{cat}</span>
-                  <span className="text-xs font-black text-zinc-900 dark:text-white block">£{val.toFixed(2)}</span>
-                  <span className="text-[9px] text-zinc-500 dark:text-zinc-400">₹{Math.round(val * exchangeRate).toLocaleString('en-IN')}</span>
+                  <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400 block uppercase tracking-wider">{cat}</span>
+                  <span className="text-sm font-black text-zinc-900 dark:text-white block">£{val.toFixed(2)}</span>
+                  <span className="text-xs text-zinc-500 dark:text-zinc-400">₹{Math.round(val * exchangeRate).toLocaleString('en-IN')}</span>
                 </div>
               );
             })}
             {Object.keys(weeklySummary.breakdowns).length === 0 && (
-              <div className="col-span-full text-center text-xs text-zinc-500 py-2">No spend recorded in the last 7 days.</div>
+              <div className="col-span-full text-center text-sm text-zinc-500 py-2">No spend recorded in the last 7 days.</div>
             )}
           </div>
         </div>
@@ -132,7 +132,7 @@ export const ExpenseTracker: React.FC<ExpenseTrackerProps> = ({
                 placeholder="Search description..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-zinc-50 dark:bg-black/40 border border-zinc-200 dark:border-white/10 rounded-xl py-2 pl-9 pr-3 text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-indigo-500/50"
+                className="w-full bg-zinc-50 dark:bg-black/40 border border-zinc-200 dark:border-white/10 rounded-xl py-2 pl-9 pr-3 text-sm text-zinc-900 dark:text-white focus:outline-none focus:border-indigo-500/50"
               />
             </div>
             
@@ -141,7 +141,7 @@ export const ExpenseTracker: React.FC<ExpenseTrackerProps> = ({
               <select
                 value={selectedFilter}
                 onChange={(e) => setSelectedFilter(e.target.value)}
-                className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-white/10 rounded-xl py-2 px-3 text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-indigo-500"
+                className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-white/10 rounded-xl py-2 px-3 text-sm text-zinc-900 dark:text-white focus:outline-none focus:border-indigo-500"
               >
                 <option value="All">All Categories</option>
                 {categories.map(c => (
@@ -154,24 +154,24 @@ export const ExpenseTracker: React.FC<ExpenseTrackerProps> = ({
           {/* Expenses Scroll Area */}
           <div className="overflow-y-auto max-h-[280px] space-y-2 pr-1 scrollbar-thin scrollbar-thumb-zinc-800">
             {filteredExpenses.length === 0 ? (
-              <div className="text-center text-xs text-zinc-500 py-10">No matching expenses found.</div>
+              <div className="text-center text-sm text-zinc-500 py-10">No matching expenses found.</div>
             ) : (
               filteredExpenses.map((exp) => (
                 <div key={exp.id} className="flex justify-between items-center p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-white/5 group hover:border-indigo-500/20 duration-200">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-900/60 text-zinc-500 dark:text-zinc-400 font-bold text-[10px] uppercase min-w-[70px] text-center border border-zinc-200 dark:border-white/5">
+                    <div className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-900/60 text-zinc-500 dark:text-zinc-400 font-bold text-xs uppercase min-w-[70px] text-center border border-zinc-200 dark:border-white/5">
                       {exp.category}
                     </div>
                     <div>
-                      <span className="text-xs font-semibold text-zinc-900 dark:text-white block truncate max-w-[120px] sm:max-w-[200px]">{exp.title}</span>
-                      <span className="text-[9px] text-zinc-500 dark:text-zinc-400">{exp.date}</span>
+                      <span className="text-sm font-semibold text-zinc-900 dark:text-white block truncate max-w-[120px] sm:max-w-[200px]">{exp.title}</span>
+                      <span className="text-xs text-zinc-500 dark:text-zinc-400">{exp.date}</span>
                     </div>
                   </div>
                   
                   <div className="flex items-center gap-4">
                     <div className="text-right">
-                      <span className="text-xs font-black text-zinc-900 dark:text-white block">£{exp.amountGbp.toFixed(2)}</span>
-                      <span className="text-[9px] text-zinc-500 dark:text-zinc-400">₹{Math.round(exp.amountInr).toLocaleString('en-IN')}</span>
+                      <span className="text-sm font-black text-zinc-900 dark:text-white block">£{exp.amountGbp.toFixed(2)}</span>
+                      <span className="text-xs text-zinc-500 dark:text-zinc-400">₹{Math.round(exp.amountInr).toLocaleString('en-IN')}</span>
                     </div>
                     <button
                       onClick={() => onDeleteExpense(exp.id)}
@@ -191,7 +191,7 @@ export const ExpenseTracker: React.FC<ExpenseTrackerProps> = ({
       <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Log New Expense">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Expense Title</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Expense Title</label>
             <input
               type="text"
               required
@@ -204,7 +204,7 @@ export const ExpenseTracker: React.FC<ExpenseTrackerProps> = ({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Amount (£ GBP)</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Amount (£ GBP)</label>
               <input
                 type="number"
                 step="0.01"
@@ -217,7 +217,7 @@ export const ExpenseTracker: React.FC<ExpenseTrackerProps> = ({
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Category</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Category</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as any)}
@@ -231,7 +231,7 @@ export const ExpenseTracker: React.FC<ExpenseTrackerProps> = ({
           </div>
 
           {amountGbp && !isNaN(parseFloat(amountGbp)) && (
-            <div className="p-3 bg-zinc-100 dark:bg-zinc-900/60 rounded-xl border border-zinc-250 dark:border-white/5 text-xs text-zinc-650 dark:text-zinc-400">
+            <div className="p-3 bg-zinc-100 dark:bg-zinc-900/60 rounded-xl border border-zinc-250 dark:border-white/5 text-sm text-zinc-650 dark:text-zinc-400">
               Estimated INR amount: <span className="font-bold text-zinc-900 dark:text-white">₹{Math.round(parseFloat(amountGbp) * exchangeRate).toLocaleString('en-IN')}</span> (at current rate £1 = ₹{exchangeRate.toFixed(2)})
             </div>
           )}

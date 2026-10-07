@@ -46,9 +46,9 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
   return (
     <DashboardProvider key={storageStatus.scope}>
-      <div className="min-h-screen flex flex-col md:flex-row bg-[#fcfcfd] dark:bg-[#030303] text-zinc-900 dark:text-white transition-colors duration-200 selection:bg-indigo-500/20">
+      <div className="min-h-screen flex flex-col md:flex-row ukos-shell text-zinc-900 dark:text-white transition-colors duration-200 selection:bg-indigo-500/20">
         <Sidebar isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(!isDarkMode)} />
-        <main className="flex-1 min-w-0 p-4 md:p-6 overflow-y-auto max-h-screen scrollbar-thin scrollbar-thumb-zinc-800">
+        <main className="ukos-main flex-1 min-w-0 p-5 md:p-8 lg:p-10 pb-24 md:pb-10 overflow-y-auto md:max-h-screen">
           {children}
         </main>
       </div>

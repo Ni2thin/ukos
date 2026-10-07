@@ -62,7 +62,7 @@ export const LiveConverter: React.FC<LiveConverterProps> = ({
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <div>
           <CardTitle>Live Currency Converter</CardTitle>
-          <p className="text-xs text-zinc-500 mt-1">GBP ↔ INR Live Exchange Conversion</p>
+          <p className="text-sm text-zinc-500 mt-1">GBP ↔ INR Live Exchange Conversion</p>
         </div>
         <button
           onClick={handleRefresh}
@@ -77,7 +77,7 @@ export const LiveConverter: React.FC<LiveConverterProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative">
           {/* GBP input */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">British Pound (£)</label>
+            <label className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">British Pound (£)</label>
             <div className="relative">
               <span className="absolute left-3 top-2.5 text-zinc-500 font-semibold">£</span>
               <input
@@ -97,7 +97,7 @@ export const LiveConverter: React.FC<LiveConverterProps> = ({
 
           {/* INR input */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Indian Rupee (₹)</label>
+            <label className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">Indian Rupee (₹)</label>
             <div className="relative">
               <span className="absolute left-3 top-2.5 text-zinc-500 font-semibold">₹</span>
               <input
@@ -114,21 +114,21 @@ export const LiveConverter: React.FC<LiveConverterProps> = ({
         {/* Dynamic metrics cards */}
         <div className="grid grid-cols-2 gap-3 pt-2">
           <div className="p-3 bg-zinc-50 dark:bg-zinc-900/40 rounded-xl border border-zinc-200/60 dark:border-white/5 space-y-1">
-            <span className="text-[10px] uppercase font-bold tracking-wider text-zinc-500">Tuition Remaining</span>
+            <span className="text-xs uppercase font-bold tracking-wider text-zinc-500">Tuition Remaining</span>
             <div className="text-sm font-bold text-indigo-600 dark:text-indigo-400">Not recorded</div>
-            <div className="text-xs text-zinc-500 dark:text-zinc-400">Add your actual tuition balance</div>
+            <div className="text-sm text-zinc-500 dark:text-zinc-400">Add your actual tuition balance</div>
           </div>
 
           <div className="p-3 bg-zinc-50 dark:bg-zinc-900/40 rounded-xl border border-zinc-200/60 dark:border-white/5 space-y-1">
-            <span className="text-[10px] uppercase font-bold tracking-wider text-zinc-500">Loan Outstanding</span>
+            <span className="text-xs uppercase font-bold tracking-wider text-zinc-500">Loan Outstanding</span>
             <div className="text-sm font-bold text-amber-600 dark:text-amber-500">₹{loanOutstandingInr.toLocaleString('en-IN')}</div>
-            <div className="text-xs text-zinc-500 dark:text-zinc-400">£{Math.round(loanOutstandingInr / exchangeRate).toLocaleString('en-GB')}</div>
+            <div className="text-sm text-zinc-500 dark:text-zinc-400">£{Math.round(loanOutstandingInr / exchangeRate).toLocaleString('en-GB')}</div>
           </div>
         </div>
 
         {/* Quick Reference Grid */}
         <div className="pt-2">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-2">Quick Reference</div>
+          <div className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">Quick Reference</div>
           <div className="grid grid-cols-3 gap-2">
             {[5, 10, 20, 50, 100, 500].map((val) => (
               <div 
@@ -136,8 +136,8 @@ export const LiveConverter: React.FC<LiveConverterProps> = ({
                 onClick={() => handleGbpChange(val.toString())}
                 className="p-2 bg-zinc-50 dark:bg-zinc-900/20 hover:bg-zinc-100 dark:hover:bg-zinc-800/40 border border-zinc-200/60 dark:border-white/5 rounded-lg text-center cursor-pointer transition-colors duration-200"
               >
-                <div className="text-xs font-bold text-zinc-900 dark:text-white">£{val}</div>
-                <div className="text-[9px] text-zinc-500 dark:text-zinc-400">₹{Math.round(val * exchangeRate).toLocaleString('en-IN')}</div>
+                <div className="text-sm font-bold text-zinc-900 dark:text-white">£{val}</div>
+                <div className="text-xs text-zinc-500 dark:text-zinc-400">₹{Math.round(val * exchangeRate).toLocaleString('en-IN')}</div>
               </div>
             ))}
           </div>

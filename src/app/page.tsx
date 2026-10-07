@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { currentMonthExpenses } from '@/lib/finance';
 import { useDashboard } from '@/context/DashboardContext';
 import { Overview } from '@/components/dashboard/Overview';
@@ -32,13 +33,17 @@ export default function Home() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <header className="flex flex-col gap-1 select-none">
-        <h2 className="text-xl font-black text-zinc-900 dark:text-white tracking-tight">
-          Overview Dashboard
+      <header className="page-header">
+        <h2 className="page-title">
+          Your UK <span className="editorial-word">life</span>
         </h2>
-        <p className="text-xs text-zinc-500">
-          UK Student Life command center with live rate tickers, schedules, and AI budgeting
+        <p className="text-sm text-zinc-500">
+          Your money, your plans, your next step. All in one place.
         </p>
+        <div className="flex flex-wrap gap-3 mt-5">
+          <Link href="/finances" className="rounded-md bg-indigo-600 text-white px-5 py-3 text-sm font-medium hover:bg-indigo-700">Manage money ↗</Link>
+          <Link href="/planning" className="rounded-md border border-zinc-300 dark:border-white/20 px-5 py-3 text-sm font-medium hover:bg-indigo-500/10">Plan your next step</Link>
+        </div>
       </header>
 
       {/* Metrics Row */}

@@ -25,11 +25,11 @@ export default function FinancesPage() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <header className="flex flex-col gap-1 select-none">
-        <h2 className="text-xl font-black text-zinc-900 dark:text-white tracking-tight">
-          Finances & Expense Logs
+      <header className="page-header">
+        <h2 className="page-title">
+          Money overview
         </h2>
-        <p className="text-xs text-zinc-500">
+        <p className="text-sm text-zinc-500">
           Manage your education loan parameters, log student transactions and analyze your monthly expenditure breakdowns
         </p>
       </header>

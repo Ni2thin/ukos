@@ -132,7 +132,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                 <h3 className="text-lg font-black text-zinc-900 dark:text-white uppercase tracking-wider">
                   {profile.fullName || 'NITTHIN'}
                 </h3>
-                <span className="text-xs text-zinc-500 dark:text-zinc-400 font-semibold block mt-0.5">
+                <span className="text-sm text-zinc-500 dark:text-zinc-400 font-semibold block mt-0.5">
                   UK Student Identity Vault & Keys
                 </span>
               </div>
@@ -148,7 +148,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                   setUkPhone(profile.ukPhone);
                   setIsEditOpen(true);
                 }}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-md shadow-indigo-600/10"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-md shadow-indigo-600/10"
               >
                 <Edit3 className="h-3.5 w-3.5" /> Edit Profile Details
               </button>
@@ -160,7 +160,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
               {/* FIELD 1: Passport */}
               <div className="p-3 bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-white/5 rounded-xl space-y-1 relative">
                 <div className="flex justify-between items-center">
-                  <span className="text-[9px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">Passport Number</span>
+                  <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">Passport Number</span>
                   <div className="flex items-center gap-1.5">
                     <button 
                       onClick={() => handleToggleObscure('passportNo')}
@@ -176,7 +176,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                     </button>
                   </div>
                 </div>
-                <div className="text-xs font-bold font-mono text-zinc-900 dark:text-white tracking-wide">
+                <div className="text-sm font-bold font-mono text-zinc-900 dark:text-white tracking-wide">
                   {renderValue(profile.passportNo, 'passportNo')}
                 </div>
               </div>
@@ -184,7 +184,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
               {/* FIELD 2: NI Number */}
               <div className="p-3 bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-white/5 rounded-xl space-y-1 relative">
                 <div className="flex justify-between items-center">
-                  <span className="text-[9px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">NI Number (Work & Tax)</span>
+                  <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">NI Number (Work & Tax)</span>
                   <div className="flex items-center gap-1.5">
                     <button 
                       onClick={() => handleToggleObscure('niNumber')}
@@ -200,7 +200,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                     </button>
                   </div>
                 </div>
-                <div className="text-xs font-bold font-mono text-zinc-900 dark:text-white tracking-wide">
+                <div className="text-sm font-bold font-mono text-zinc-900 dark:text-white tracking-wide">
                   {renderValue(profile.niNumber, 'niNumber')}
                 </div>
               </div>
@@ -208,7 +208,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
               {/* FIELD 3: Share Code */}
               <div className="p-3 bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-white/5 rounded-xl space-y-1 relative">
                 <div className="flex justify-between items-center">
-                  <span className="text-[9px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">Share Code (Employer Verification)</span>
+                  <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">Share Code (Employer Verification)</span>
                   <div className="flex items-center gap-1.5">
                     <button 
                       onClick={() => handleToggleObscure('shareCode')}
@@ -224,7 +224,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                     </button>
                   </div>
                 </div>
-                <div className="text-xs font-bold font-mono text-indigo-600 dark:text-indigo-400 tracking-wide">
+                <div className="text-sm font-bold font-mono text-indigo-600 dark:text-indigo-400 tracking-wide">
                   {renderValue(profile.shareCode, 'shareCode')}
                 </div>
               </div>
@@ -232,7 +232,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
               {/* FIELD 4: BRP Card Number */}
               <div className="p-3 bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-white/5 rounded-xl space-y-1 relative">
                 <div className="flex justify-between items-center">
-                  <span className="text-[9px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">BRP Card Number</span>
+                  <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">BRP Card Number</span>
                   <div className="flex items-center gap-1.5">
                     <button 
                       onClick={() => handleToggleObscure('brpNumber')}
@@ -248,7 +248,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                     </button>
                   </div>
                 </div>
-                <div className="text-xs font-bold font-mono text-zinc-900 dark:text-white tracking-wide">
+                <div className="text-sm font-bold font-mono text-zinc-900 dark:text-white tracking-wide">
                   {renderValue(profile.brpNumber, 'brpNumber')}
                 </div>
               </div>
@@ -256,7 +256,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
               {/* FIELD 5: NHS NHS Number */}
               <div className="p-3 bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-white/5 rounded-xl space-y-1 relative">
                 <div className="flex justify-between items-center">
-                  <span className="text-[9px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">GP / NHS Medical Number</span>
+                  <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">GP / NHS Medical Number</span>
                   <div className="flex items-center gap-1.5">
                     <button 
                       onClick={() => handleToggleObscure('nhsNumber')}
@@ -272,7 +272,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                     </button>
                   </div>
                 </div>
-                <div className="text-xs font-bold font-mono text-zinc-900 dark:text-white tracking-wide">
+                <div className="text-sm font-bold font-mono text-zinc-900 dark:text-white tracking-wide">
                   {renderValue(profile.nhsNumber, 'nhsNumber')}
                 </div>
               </div>
@@ -280,7 +280,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
               {/* FIELD 6: UK Phone */}
               <div className="p-3 bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-white/5 rounded-xl space-y-1 relative">
                 <div className="flex justify-between items-center">
-                  <span className="text-[9px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">UK Mobile Number</span>
+                  <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">UK Mobile Number</span>
                   <button 
                     onClick={() => handleCopy(profile.ukPhone, 'ukPhone')}
                     className="text-zinc-500 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors"
@@ -288,7 +288,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                     {copiedField === 'ukPhone' ? <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
                   </button>
                 </div>
-                <div className="text-xs font-bold text-zinc-900 dark:text-white tracking-wide flex items-center gap-1.5">
+                <div className="text-sm font-bold text-zinc-900 dark:text-white tracking-wide flex items-center gap-1.5">
                   <Phone className="h-3 w-3 text-zinc-400 dark:text-zinc-500" /> {profile.ukPhone || <span className="text-zinc-500 dark:text-zinc-650 italic">Not set</span>}
                 </div>
               </div>
@@ -302,7 +302,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
       <Modal isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} title="Edit Identity Profile Vault">
         <form onSubmit={handleSaveProfile} className="space-y-4">
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Full Name</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Full Name</label>
             <input
               type="text"
               required
@@ -314,7 +314,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Passport Number</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Passport Number</label>
               <input
                 type="text"
                 value={passportNo}
@@ -324,7 +324,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">NI Number (Work/Tax)</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">NI Number (Work/Tax)</label>
               <input
                 type="text"
                 value={niNumber}
@@ -336,7 +336,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Share Code</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Share Code</label>
               <input
                 type="text"
                 value={shareCode}
@@ -346,7 +346,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">BRP Card Number</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">BRP Card Number</label>
               <input
                 type="text"
                 value={brpNumber}
@@ -358,7 +358,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">GP / NHS Number</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">GP / NHS Number</label>
               <input
                 type="text"
                 value={nhsNumber}
@@ -368,7 +368,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">UK Mobile Phone</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">UK Mobile Phone</label>
               <input
                 type="text"
                 value={ukPhone}

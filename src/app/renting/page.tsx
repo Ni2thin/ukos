@@ -194,11 +194,11 @@ export default function RentingPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <header className="flex flex-col gap-1 select-none">
-        <h2 className="text-xl font-black text-zinc-900 dark:text-white tracking-tight">
+      <header className="page-header">
+        <h2 className="page-title">
           Tenancy & Accommodation Vault
         </h2>
-        <p className="text-xs text-zinc-500">
+        <p className="text-sm text-zinc-500">
           UK Student rental command center. Monitor deposits, inventory logs, utility bill splits, and agency comms
         </p>
       </header>
@@ -225,33 +225,33 @@ export default function RentingPage() {
                   setLlPhone(tenancyDetails.landlordPhone);
                   setIsEditTenancyOpen(true);
                 }}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[10px] font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 hover:bg-indigo-500/20 transition-all"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 hover:bg-indigo-500/20 transition-all"
               >
                 <Edit3 className="h-3 w-3" /> Edit Agreement
               </button>
             </CardHeader>
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
               <div className="p-3 bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-white/5 rounded-xl space-y-1">
-                <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider block">Contracted Rent</span>
-                <div className="text-lg font-black text-zinc-900 dark:text-white">£{tenancyDetails.rentAmountGbp} <span className="text-xs text-zinc-400 font-normal">/ month</span></div>
-                <div className="text-[9px] text-zinc-500">Payable due day: {tenancyDetails.dueDate}</div>
+                <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider block">Contracted Rent</span>
+                <div className="text-lg font-black text-zinc-900 dark:text-white">£{tenancyDetails.rentAmountGbp} <span className="text-sm text-zinc-400 font-normal">/ month</span></div>
+                <div className="text-xs text-zinc-500">Payable due day: {tenancyDetails.dueDate}</div>
               </div>
 
               <div className="p-3 bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-white/5 rounded-xl space-y-1">
-                <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider block">Deposit Protection</span>
+                <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider block">Deposit Protection</span>
                 <div className="text-lg font-black text-emerald-600 dark:text-emerald-400">£{tenancyDetails.depositAmountGbp}</div>
-                <div className="text-[9px] text-zinc-500 flex items-center gap-1">
+                <div className="text-xs text-zinc-500 flex items-center gap-1">
                   <ShieldCheck className="h-3 w-3 text-emerald-500" /> Ref: {tenancyDetails.depositSchemeRef || 'None'}
                 </div>
               </div>
 
               <div className="p-3.5 bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-white/5 rounded-xl md:col-span-2 space-y-2.5">
-                <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider block">Landlord / Letting Agent Contact</span>
+                <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider block">Landlord / Letting Agent Contact</span>
                 <div className="space-y-1.5">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-zinc-900 dark:text-white">
+                  <div className="flex items-center gap-2 text-sm font-semibold text-zinc-900 dark:text-white">
                     <User className="h-3.5 w-3.5 text-zinc-400" /> {tenancyDetails.landlordName || 'Not configured'}
                   </div>
-                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-500">
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-zinc-500">
                     <span className="flex items-center gap-1"><Mail className="h-3 w-3" /> {tenancyDetails.landlordEmail || 'N/A'}</span>
                     <span className="flex items-center gap-1"><Phone className="h-3 w-3" /> {tenancyDetails.landlordPhone || 'N/A'}</span>
                   </div>
@@ -272,21 +272,21 @@ export default function RentingPage() {
             </CardHeader>
             <CardContent className="space-y-3.5 py-4 max-h-[220px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-zinc-800">
               {rentPayments.length === 0 ? (
-                <div className="text-center text-xs text-zinc-500 py-6">No rent logs registered.</div>
+                <div className="text-center text-sm text-zinc-500 py-6">No rent logs registered.</div>
               ) : (
                 rentPayments.map(p => (
                   <div key={p.id} className="flex justify-between items-center p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-white/5">
                     <div>
-                      <span className="text-xs font-bold text-zinc-900 dark:text-white block">{p.month}</span>
-                      <span className="text-[9px] text-zinc-400">
+                      <span className="text-sm font-bold text-zinc-900 dark:text-white block">{p.month}</span>
+                      <span className="text-xs text-zinc-400">
                         {p.status === 'Paid' ? `Paid on ${p.datePaid}` : 'Standing order pending'}
                       </span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className="text-xs font-black text-zinc-900 dark:text-white">£{p.amountGbp}</span>
+                      <span className="text-sm font-black text-zinc-900 dark:text-white">£{p.amountGbp}</span>
                       <button
                         onClick={() => toggleRentPaymentStatus(p.id)}
-                        className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-colors ${
+                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-colors ${
                           p.status === 'Paid'
                             ? 'text-emerald-600 bg-emerald-600/10 hover:bg-emerald-600/20'
                             : 'text-amber-600 bg-amber-600/10 hover:bg-amber-600/20'
@@ -317,14 +317,14 @@ export default function RentingPage() {
               </div>
               <button 
                 onClick={() => setIsAddInventoryOpen(true)}
-                className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-[10px] font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors"
+                className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors"
               >
                 <Plus className="h-3.5 w-3.5" /> Log Item
               </button>
             </CardHeader>
             <CardContent className="space-y-2.5 py-4 max-h-[300px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-zinc-800">
               {inventoryItems.length === 0 ? (
-                <div className="text-center text-xs text-zinc-500 py-10">No inventory logged. Document rooms early!</div>
+                <div className="text-center text-sm text-zinc-500 py-10">No inventory logged. Document rooms early!</div>
               ) : (
                 inventoryItems.map(item => (
                   <div key={item.id} className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-white/5 space-y-1 relative group">
@@ -336,10 +336,10 @@ export default function RentingPage() {
                     </button>
                     
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-zinc-900 dark:text-white">{item.name}</span>
+                      <span className="text-sm font-bold text-zinc-900 dark:text-white">{item.name}</span>
                       <button 
                         onClick={() => toggleInventoryStatus(item.id)}
-                        className={`px-1.5 py-0.5 rounded text-[8px] font-black uppercase transition-all tracking-wider ${
+                        className={`px-1.5 py-0.5 rounded text-xs font-black uppercase transition-all tracking-wider ${
                           item.status === 'Fine' 
                             ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' 
                             : item.status === 'Needs Clean' 
@@ -350,7 +350,7 @@ export default function RentingPage() {
                         {item.status}
                       </button>
                     </div>
-                    <p className="text-[10px] text-zinc-500 leading-normal">{item.notes || 'No description notes provided.'}</p>
+                    <p className="text-xs text-zinc-500 leading-normal">{item.notes || 'No description notes provided.'}</p>
                   </div>
                 ))
               )}
@@ -368,14 +368,14 @@ export default function RentingPage() {
               </div>
               <button 
                 onClick={() => setIsAddBillOpen(true)}
-                className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-[10px] font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors"
+                className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors"
               >
                 <Plus className="h-3.5 w-3.5" /> Split Bill
               </button>
             </CardHeader>
             <CardContent className="space-y-3.5 py-4 max-h-[300px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-zinc-800">
               {billSplits.length === 0 ? (
-                <div className="text-center text-xs text-zinc-500 py-10">No split utility bills logged.</div>
+                <div className="text-center text-sm text-zinc-500 py-10">No split utility bills logged.</div>
               ) : (
                 billSplits.map(b => {
                   const numPeople = b.splitWith.length + 1; // mates + creator
@@ -391,25 +391,25 @@ export default function RentingPage() {
 
                       <div className="flex justify-between items-start">
                         <div>
-                          <span className="text-xs font-bold text-zinc-900 dark:text-white">{b.name}</span>
-                          <span className="text-[9px] text-zinc-400 block mt-0.5">Paid by: {b.paidBy}</span>
+                          <span className="text-sm font-bold text-zinc-900 dark:text-white">{b.name}</span>
+                          <span className="text-xs text-zinc-400 block mt-0.5">Paid by: {b.paidBy}</span>
                         </div>
                         <div className="text-right">
-                          <span className="text-xs font-black text-zinc-900 dark:text-white block">£{b.amountGbp}</span>
-                          <span className="text-[9px] text-indigo-500 block">£{perPerson} each</span>
+                          <span className="text-sm font-black text-zinc-900 dark:text-white block">£{b.amountGbp}</span>
+                          <span className="text-xs text-indigo-500 block">£{perPerson} each</span>
                         </div>
                       </div>
 
                       <div className="flex items-center justify-between pt-2 border-t border-zinc-200/60 dark:border-white/5">
                         <div className="flex flex-wrap gap-1 items-center">
-                          <span className="text-[8px] uppercase font-bold text-zinc-500">Split:</span>
+                          <span className="text-xs uppercase font-bold text-zinc-500">Split:</span>
                           {b.splitWith.map(m => (
-                            <span key={m} className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-900 text-[8px] font-semibold text-zinc-500">{m}</span>
+                            <span key={m} className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-900 text-xs font-semibold text-zinc-500">{m}</span>
                           ))}
                         </div>
                         <button
                           onClick={() => handleSettleBill(b.id)}
-                          className={`px-2 py-0.5 rounded text-[8px] font-black uppercase transition-colors ${
+                          className={`px-2 py-0.5 rounded text-xs font-black uppercase transition-colors ${
                             b.status === 'Settled'
                               ? 'text-emerald-500 bg-emerald-500/10'
                               : 'text-rose-500 bg-rose-500/10 hover:bg-rose-500/20'
@@ -438,14 +438,14 @@ export default function RentingPage() {
             </div>
             <button 
               onClick={() => setIsAddCommOpen(true)}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors"
             >
               <Plus className="h-3.5 w-3.5" /> Log Interaction
             </button>
           </CardHeader>
           <CardContent className="space-y-3.5 py-4">
             {landlordComms.length === 0 ? (
-              <div className="text-center text-xs text-zinc-500 py-6">No interactions logged yet. Keep record of all tenant calls/emails.</div>
+              <div className="text-center text-sm text-zinc-500 py-6">No interactions logged yet. Keep record of all tenant calls/emails.</div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {landlordComms.map(c => (
@@ -457,11 +457,11 @@ export default function RentingPage() {
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
                     <div className="flex items-center justify-between">
-                      <span className="text-[8px] font-black uppercase px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-600 dark:text-amber-400">{c.type}</span>
-                      <span className="text-[9px] text-zinc-400 font-mono">{c.date}</span>
+                      <span className="text-xs font-black uppercase px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-600 dark:text-amber-400">{c.type}</span>
+                      <span className="text-xs text-zinc-400 font-mono">{c.date}</span>
                     </div>
-                    <span className="text-xs font-bold text-zinc-900 dark:text-white block pt-1">{c.subject}</span>
-                    <p className="text-[10px] text-zinc-500 leading-normal">{c.summary}</p>
+                    <span className="text-sm font-bold text-zinc-900 dark:text-white block pt-1">{c.subject}</span>
+                    <p className="text-xs text-zinc-500 leading-normal">{c.summary}</p>
                   </div>
                 ))}
               </div>
@@ -475,7 +475,7 @@ export default function RentingPage() {
         <form onSubmit={handleUpdateTenancy} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Monthly Rent (£)</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Monthly Rent (£)</label>
               <input
                 type="number"
                 required
@@ -485,7 +485,7 @@ export default function RentingPage() {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Deposit Amount (£)</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Deposit Amount (£)</label>
               <input
                 type="number"
                 required
@@ -498,7 +498,7 @@ export default function RentingPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Deposit Scheme Reference</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Deposit Scheme Reference</label>
               <input
                 type="text"
                 value={depositScheme}
@@ -508,7 +508,7 @@ export default function RentingPage() {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Due Date</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Due Date</label>
               <input
                 type="text"
                 value={dueDate}
@@ -520,7 +520,7 @@ export default function RentingPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Landlord/Agent Name</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Landlord/Agent Name</label>
             <input
               type="text"
               required
@@ -532,7 +532,7 @@ export default function RentingPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Email Address</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Email Address</label>
               <input
                 type="email"
                 value={llEmail}
@@ -541,7 +541,7 @@ export default function RentingPage() {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Phone Number</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Phone Number</label>
               <input
                 type="text"
                 value={llPhone}
@@ -566,7 +566,7 @@ export default function RentingPage() {
       <Modal isOpen={isAddInventoryOpen} onClose={() => setIsAddInventoryOpen(false)} title="Log Inventory Item condition">
         <form onSubmit={handleAddInventory} className="space-y-4">
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Item Name</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Item Name</label>
             <input
               type="text"
               required
@@ -578,7 +578,7 @@ export default function RentingPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Initial Condition Status</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Initial Condition Status</label>
             <select
               value={newItemStatus}
               onChange={e => setNewItemStatus(e.target.value as any)}
@@ -591,7 +591,7 @@ export default function RentingPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Verification Notes</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Verification Notes</label>
             <textarea
               value={newItemNotes}
               onChange={e => setNewItemNotes(e.target.value)}
@@ -617,7 +617,7 @@ export default function RentingPage() {
         <form onSubmit={handleAddComm} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Interaction Type</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Interaction Type</label>
               <select
                 value={commType}
                 onChange={e => setCommType(e.target.value as any)}
@@ -630,7 +630,7 @@ export default function RentingPage() {
               </select>
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Subject</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Subject</label>
               <input
                 type="text"
                 required
@@ -643,7 +643,7 @@ export default function RentingPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Conversation Summary</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Conversation Summary</label>
             <textarea
               required
               value={commSummary}
@@ -669,7 +669,7 @@ export default function RentingPage() {
       <Modal isOpen={isAddBillOpen} onClose={() => setIsAddBillOpen(false)} title="Log Bill to Split">
         <form onSubmit={handleAddBill} className="space-y-4">
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Bill Description</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Bill Description</label>
             <input
               type="text"
               required
@@ -682,7 +682,7 @@ export default function RentingPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Bill Amount (£)</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Bill Amount (£)</label>
               <input
                 type="number"
                 required
@@ -692,7 +692,7 @@ export default function RentingPage() {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Paid By</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Paid By</label>
               <input
                 type="text"
                 required
@@ -704,7 +704,7 @@ export default function RentingPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Flatmates to Split With (comma separated)</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Flatmates to Split With (comma separated)</label>
             <input
               type="text"
               required

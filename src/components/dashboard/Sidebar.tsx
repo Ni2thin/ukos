@@ -1,16 +1,16 @@
 import React, { useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  LayoutDashboard, 
-  Wallet, 
-  Compass, 
-  FileText, 
-  Menu, 
-  X, 
-  Sun, 
-  Moon, 
-  Server, 
+import {
+  LayoutDashboard,
+  Wallet,
+  Compass,
+  FileText,
+  Menu,
+  X,
+  Sun,
+  Moon,
+  Server,
   HardDrive,
   Sparkles,
   Home,
@@ -33,23 +33,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, onToggleTheme }) =
   const { profile } = useDashboard();
 
   const navItems = [
-    { name: 'Dashboard Overview', path: '/', icon: LayoutDashboard },
-    { name: 'Finances & Logs', path: '/finances', icon: Wallet },
-    { name: 'Savings & Planning', path: '/planning', icon: Compass },
-    { name: 'Knowledge & Docs', path: '/documents', icon: FileText },
-    { name: 'Tenancy & Renting', path: '/renting', icon: Home },
-    { name: 'Job Board (Kanban)', path: '/jobs', icon: Briefcase },
-    { name: 'NHS GP & Health', path: '/health', icon: HeartPulse },
+    { name: 'Overview', path: '/', icon: LayoutDashboard },
+    { name: 'Money', path: '/finances', icon: Wallet },
+    { name: 'Planning', path: '/planning', icon: Compass },
+    { name: 'Documents', path: '/documents', icon: FileText },
+    { name: 'Home & renting', path: '/renting', icon: Home },
+    { name: 'Jobs', path: '/jobs', icon: Briefcase },
+    { name: 'Health', path: '/health', icon: HeartPulse },
     { name: 'Backup & Sync', path: '/settings', icon: ShieldCheck }
   ];
 
   const handleToggleMobile = () => setMobileOpen(!mobileOpen);
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-zinc-950/80 dark:bg-zinc-950/95 border-r border-white/5 backdrop-blur-2xl p-5 text-zinc-400 select-none">
+    <div className="sidebar-panel flex flex-col h-full overflow-y-auto bg-zinc-950/80 dark:bg-zinc-950/95 border-r border-white/5 backdrop-blur-2xl p-5 text-zinc-400 select-none">
       {/* Brand Header */}
       <div className="pb-6 border-b border-white/5 space-y-3">
-        <h1 className="text-xl font-black text-white tracking-tight flex items-center gap-1.5">
+        <h1 className="brand-title text-white flex items-center gap-1.5">
           UKOS <Sparkles className="h-4 w-4 text-indigo-400 fill-indigo-400" />
         </h1>
         {/* User Profile Pill */}
@@ -57,19 +57,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, onToggleTheme }) =
           {profile.pfp ? (
             <img src={profile.pfp} alt="PFP" className="h-7 w-7 rounded-lg object-cover shrink-0" />
           ) : (
-            <div className="h-7 w-7 rounded-lg bg-indigo-600 flex items-center justify-center text-xs font-bold text-white shrink-0 shadow-lg shadow-indigo-600/10">
+            <div className="h-7 w-7 rounded-lg bg-indigo-600 flex items-center justify-center text-sm font-bold text-white shrink-0 shadow-lg shadow-indigo-600/10">
               {profile.fullName.charAt(0).toUpperCase() || 'N'}
             </div>
           )}
           <div className="min-w-0">
-            <span className="text-xs font-black text-white block truncate uppercase tracking-wider">{profile.fullName || 'NITTHIN'}</span>
-            <span className="text-[9px] text-zinc-500 font-semibold block leading-none">MSc Student Surrey</span>
+            <span className="text-sm font-black text-white block truncate uppercase tracking-wider">{profile.fullName || 'NITTHIN'}</span>
+            <span className="text-xs text-zinc-500 font-semibold block leading-none">MSc Student Surrey</span>
           </div>
         </div>
       </div>
 
       {/* Nav Menu Links */}
-      <nav className="flex-1 py-6 space-y-1.5">
+      <nav aria-label="Main navigation" className="flex-1 py-6 space-y-1.5">
+        <p className="text-xs uppercase tracking-[0.2em] text-zinc-400 px-3 mb-4">Your workspace</p>
         {navItems.map((item) => {
           const isActive = pathname === item.path;
           const Icon = item.icon;
@@ -77,10 +78,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, onToggleTheme }) =
             <Link
               key={item.path}
               href={item.path}
+              aria-current={isActive ? "page" : undefined}
               onClick={() => setMobileOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
-                isActive 
-                  ? 'bg-indigo-600/15 text-indigo-400 border border-indigo-500/25 shadow-md shadow-indigo-600/5' 
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold tracking-wide transition-all ${
+                isActive
+                  ? 'bg-white/5 text-white border-l-2 border-indigo-400'
                   : 'hover:bg-white/5 hover:text-white border border-transparent'
               }`}
             >
@@ -95,16 +97,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, onToggleTheme }) =
       <div className="border-t border-white/5 pt-4 space-y-4">
         <Link href="/settings" className="p-3 bg-zinc-900/40 rounded-xl border border-white/5 flex items-center gap-2">
           {sync.scope==='guest'?<HardDrive className="h-3.5 w-3.5 text-amber-400"/>:<Server className="h-3.5 w-3.5 text-indigo-400"/>}
-          <div><span className="text-[10px] text-white font-bold block">{sync.scope==='guest'?'Local records':'Private account'}</span>
-          <span className={`text-[9px] ${sync.phase==='ready'?'text-emerald-400':'text-amber-400'}`}>
+          <div><span className="text-xs text-white font-bold block">{sync.scope==='guest'?'Local records':'Private account'}</span>
+          <span className={`text-xs ${sync.phase==='ready'?'text-emerald-400':'text-amber-400'}`}>
             {sync.scope==='guest'?'Backup & sign-in':!sync.online?'Offline · saved locally':sync.phase==='syncing'?'Syncing…':sync.phase==='conflict'?'Conflict · review needed':sync.phase==='error'?'Sync failed · retrying':sync.pending?'Pending upload':sync.phase==='ready'?'All changes synced':'Checking cloud records'}
           </span></div>
         </Link>
 
         {/* Theme and clock control */}
         <div className="flex items-center justify-between">
-          <span className="text-[9px] uppercase tracking-wider text-zinc-500 font-bold">Theme</span>
+          <span className="text-xs uppercase tracking-wider text-zinc-500 font-bold">Theme</span>
           <button
+            aria-label={isDarkMode ? "Switch to light theme" : "Switch to dark theme"}
             onClick={onToggleTheme}
             className="p-1.5 rounded-lg bg-zinc-900 border border-white/10 hover:border-white/20 text-zinc-400 hover:text-white transition-all duration-200"
           >
@@ -128,7 +131,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, onToggleTheme }) =
           {profile.pfp ? (
             <img src={profile.pfp} alt="PFP" className="h-6 w-6 rounded-md object-cover shrink-0" />
           ) : (
-            <div className="h-6 w-6 rounded-md bg-indigo-600 flex items-center justify-center text-[10px] font-black text-white shrink-0">
+            <div className="h-6 w-6 rounded-md bg-indigo-600 flex items-center justify-center text-xs font-black text-white shrink-0">
               {profile.fullName.charAt(0).toUpperCase() || 'N'}
             </div>
           )}
@@ -137,6 +140,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, onToggleTheme }) =
           </h1>
         </div>
         <button
+          aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
+          aria-expanded={mobileOpen}
           onClick={handleToggleMobile}
           className="p-2 rounded-lg bg-zinc-900 border border-white/5 text-zinc-400 hover:text-white transition-colors"
         >
@@ -144,16 +149,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, onToggleTheme }) =
         </button>
       </header>
 
+      <nav aria-label="Quick navigation" className="mobile-dock md:hidden">
+        {navItems.slice(0, 4).map(item => <Link key={item.path} href={item.path} aria-current={pathname === item.path ? 'page' : undefined}><item.icon className="h-5 w-5" /><span>{item.name}</span></Link>)}
+      </nav>
       {/* Mobile sidebar overlay drawer */}
       {mobileOpen && (
         <div className="md:hidden fixed inset-0 z-40 flex">
           {/* Backdrop */}
-          <div 
+          <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={handleToggleMobile}
           />
           {/* Drawer content */}
-          <div className="relative w-64 max-w-[80vw] h-full z-50">
+          <div className="relative w-72 max-w-[85vw] h-full z-50">
+            <button onClick={() => setMobileOpen(false)} aria-label="Close navigation" className="absolute right-4 top-5 z-50 text-white p-2"><X className="h-5 w-5" /></button>
             {sidebarContent}
           </div>
         </div>

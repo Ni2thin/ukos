@@ -151,11 +151,11 @@ export const CalendarWidget: React.FC<CalendarWidgetProps> = ({
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <div>
           <CardTitle>UK Academic & Life Calendar</CardTitle>
-          <p className="text-xs text-zinc-500 mt-1">Deadlines, part-time shifts and EMI trackers</p>
+          <p className="text-sm text-zinc-500 mt-1">Deadlines, part-time shifts and EMI trackers</p>
         </div>
         <button
           onClick={() => setIsAddOpen(true)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-md shadow-indigo-600/10"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-md shadow-indigo-600/10"
         >
           <Plus className="h-3.5 w-3.5" /> Add Event
         </button>
@@ -170,7 +170,7 @@ export const CalendarWidget: React.FC<CalendarWidgetProps> = ({
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
-          <span className="text-xs font-bold text-zinc-900 dark:text-white tracking-wider">
+          <span className="text-sm font-bold text-zinc-900 dark:text-white tracking-wider">
             {monthNames[month]} {year}
           </span>
           <button 
@@ -184,7 +184,7 @@ export const CalendarWidget: React.FC<CalendarWidgetProps> = ({
         {/* Days of week header */}
         <div className="grid grid-cols-7 gap-1 text-center">
           {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
-            <span key={d} className="text-[10px] uppercase font-bold text-zinc-500 py-1">
+            <span key={d} className="text-xs uppercase font-bold text-zinc-500 py-1">
               {d}
             </span>
           ))}
@@ -211,7 +211,7 @@ export const CalendarWidget: React.FC<CalendarWidgetProps> = ({
                 }`}
               >
                 {/* Day Number */}
-                <span className={`text-[10px] font-bold ${
+                <span className={`text-xs font-bold ${
                   isSelected ? 'text-indigo-600 dark:text-indigo-300' : 'text-zinc-500 dark:text-zinc-400'
                 }`}>
                   {cell.dayNum}
@@ -238,27 +238,27 @@ export const CalendarWidget: React.FC<CalendarWidgetProps> = ({
         {/* Selected date events list */}
         <div className="bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-white/5 rounded-2xl p-3.5 space-y-3">
           <div className="flex justify-between items-center border-b border-zinc-200 dark:border-white/5 pb-2">
-            <span className="text-xs font-bold text-zinc-900 dark:text-white">
+            <span className="text-sm font-bold text-zinc-900 dark:text-white">
               Schedule: {selectedDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
             </span>
-            <span className="text-[10px] text-zinc-500 dark:text-zinc-400 font-semibold">{dayEvents.length} Tasks</span>
+            <span className="text-xs text-zinc-500 dark:text-zinc-400 font-semibold">{dayEvents.length} Tasks</span>
           </div>
 
           <div className="space-y-2.5 max-h-[140px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-zinc-850">
             {dayEvents.length === 0 ? (
-              <div className="text-center text-xs text-zinc-500 py-6">No events scheduled.</div>
+              <div className="text-center text-sm text-zinc-500 py-6">No events scheduled.</div>
             ) : (
               dayEvents.map((e) => (
                 <div key={e.id} className="flex justify-between items-start p-2.5 rounded-xl bg-zinc-100/50 dark:bg-zinc-950/40 border border-zinc-200 dark:border-white/5 group duration-200 hover:border-indigo-500/20">
                   <div className="space-y-1.5 flex-1 pr-2">
                     <div className="flex items-center gap-1.5">
-                      <span className={`px-2 py-0.5 text-[8px] uppercase tracking-wider font-bold rounded border ${getCategoryColor(e.category)}`}>
+                      <span className={`px-2 py-0.5 text-xs uppercase tracking-wider font-bold rounded border ${getCategoryColor(e.category)}`}>
                         {e.category}
                       </span>
-                      <h5 className="text-xs font-semibold text-zinc-900 dark:text-white leading-tight">{e.title}</h5>
+                      <h5 className="text-sm font-semibold text-zinc-900 dark:text-white leading-tight">{e.title}</h5>
                     </div>
                     {e.description && (
-                      <p className="text-[10px] text-zinc-500 dark:text-zinc-400 leading-normal pl-0.5">{e.description}</p>
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-normal pl-0.5">{e.description}</p>
                     )}
                   </div>
                   <button
@@ -278,13 +278,13 @@ export const CalendarWidget: React.FC<CalendarWidgetProps> = ({
       <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title={`Add event on ${formattedSelectedDate}`}>
         <form onSubmit={handleAddEventSubmit} className="space-y-4">
           <div className="space-y-1">
-            <label htmlFor="event-date" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Event Date</label>
+            <label htmlFor="event-date" className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Event Date</label>
             <input id="event-date" type="date" required value={formattedSelectedDate}
               onChange={e => { if (e.target.value) setSelectedDate(new Date(`${e.target.value}T00:00:00`)); }}
               className="w-full rounded-xl border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-black/40 p-2 text-sm" />
           </div>
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Event Title</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Event Title</label>
             <input
               type="text"
               required
@@ -296,7 +296,7 @@ export const CalendarWidget: React.FC<CalendarWidgetProps> = ({
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Category / Status</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Category / Status</label>
             <select
               value={eventCategory}
               onChange={(e) => setEventCategory(e.target.value as any)}
@@ -310,7 +310,7 @@ export const CalendarWidget: React.FC<CalendarWidgetProps> = ({
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Description (Optional)</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Description (Optional)</label>
             <textarea
               value={eventDesc}
               onChange={(e) => setEventDesc(e.target.value)}

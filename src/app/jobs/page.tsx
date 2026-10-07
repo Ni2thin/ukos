@@ -92,11 +92,11 @@ export default function JobsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <header className="flex flex-col gap-1 select-none">
-        <h2 className="text-xl font-black text-zinc-900 dark:text-white tracking-tight">
+      <header className="page-header">
+        <h2 className="page-title">
           Job & Internship Application Board
         </h2>
-        <p className="text-xs text-zinc-500">
+        <p className="text-sm text-zinc-500">
           Track Graduate Schemes, internships, and part-time jobs. Keep notes and monitor visa sponsorship status
         </p>
       </header>
@@ -104,29 +104,29 @@ export default function JobsPage() {
       {/* Metrics Row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="p-4 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-white/5 rounded-2xl">
-          <span className="text-[10px] uppercase font-bold tracking-wider text-zinc-500">Total Applications</span>
+          <span className="text-xs uppercase font-bold tracking-wider text-zinc-500">Total Applications</span>
           <div className="text-2xl font-black text-zinc-900 dark:text-white mt-1">{totalApps}</div>
         </div>
         <div className="p-4 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-white/5 rounded-2xl">
-          <span className="text-[10px] uppercase font-bold tracking-wider text-zinc-500">Interviews Call</span>
+          <span className="text-xs uppercase font-bold tracking-wider text-zinc-500">Interviews Call</span>
           <div className="text-2xl font-black text-amber-500 mt-1">{interviewingApps}</div>
         </div>
         <div className="p-4 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-white/5 rounded-2xl">
-          <span className="text-[10px] uppercase font-bold tracking-wider text-zinc-500">Offers Secured</span>
+          <span className="text-xs uppercase font-bold tracking-wider text-zinc-500">Offers Secured</span>
           <div className="text-2xl font-black text-emerald-500 mt-1">{offeredApps}</div>
         </div>
         <div className="p-4 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-white/5 rounded-2xl">
-          <span className="text-[10px] uppercase font-bold tracking-wider text-zinc-500">Awaiting Response</span>
+          <span className="text-xs uppercase font-bold tracking-wider text-zinc-500">Awaiting Response</span>
           <div className="text-2xl font-black text-indigo-500 mt-1">{pendingApps}</div>
         </div>
       </div>
 
       {/* Kanban Board Container */}
       <div className="flex justify-between items-center bg-zinc-50/50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-white/5 p-4 rounded-2xl">
-        <span className="text-xs font-bold text-zinc-500">Kanban Board Mode</span>
+        <span className="text-sm font-bold text-zinc-500">Kanban Board Mode</span>
         <button
           onClick={() => setIsAddOpen(true)}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-md shadow-indigo-600/10"
+          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-md shadow-indigo-600/10"
         >
           <Plus className="h-4 w-4" /> Add Application
         </button>
@@ -143,8 +143,8 @@ export default function JobsPage() {
             >
               {/* Column Header */}
               <div className="flex justify-between items-center pb-2 border-b border-zinc-200/40 dark:border-white/5">
-                <span className="text-xs font-black uppercase tracking-wider">{col.name}</span>
-                <span className="h-5 w-5 rounded-full bg-zinc-200/50 dark:bg-zinc-900/50 text-[10px] font-black flex items-center justify-center text-zinc-600 dark:text-zinc-400">
+                <span className="text-sm font-black uppercase tracking-wider">{col.name}</span>
+                <span className="h-5 w-5 rounded-full bg-zinc-200/50 dark:bg-zinc-900/50 text-xs font-black flex items-center justify-center text-zinc-600 dark:text-zinc-400">
                   {colApps.length}
                 </span>
               </div>
@@ -152,7 +152,7 @@ export default function JobsPage() {
               {/* Cards list */}
               <div className="space-y-3 flex-1 overflow-y-auto max-h-[500px] pr-0.5 scrollbar-thin">
                 {colApps.length === 0 ? (
-                  <div className="text-center text-[10px] text-zinc-400 py-10 italic">Empty stack</div>
+                  <div className="text-center text-xs text-zinc-400 py-10 italic">Empty stack</div>
                 ) : (
                   colApps.map(app => (
                     <div 
@@ -169,16 +169,16 @@ export default function JobsPage() {
 
                       {/* Job Header */}
                       <div className="space-y-0.5">
-                        <span className="text-[10px] font-bold text-zinc-400 block truncate max-w-[80%]">{app.company}</span>
-                        <span className="text-xs font-black text-zinc-950 dark:text-white block truncate max-w-[90%] leading-tight">{app.role}</span>
+                        <span className="text-xs font-bold text-zinc-400 block truncate max-w-[80%]">{app.company}</span>
+                        <span className="text-sm font-black text-zinc-950 dark:text-white block truncate max-w-[90%] leading-tight">{app.role}</span>
                       </div>
 
                       {/* Badges / Metrics info */}
                       <div className="flex flex-wrap gap-1 items-center">
-                        <span className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-900 text-[8px] font-bold text-zinc-500">
+                        <span className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-900 text-xs font-bold text-zinc-500">
                           {app.salaryGbp > 100 ? `£${app.salaryGbp.toLocaleString()}` : `£${app.salaryGbp}/hr`}
                         </span>
-                        <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold ${
+                        <span className={`px-1.5 py-0.5 rounded text-xs font-bold ${
                           app.sponsorship === 'Yes' 
                             ? 'bg-emerald-500/10 text-emerald-600' 
                             : app.sponsorship === 'No' 
@@ -191,25 +191,25 @@ export default function JobsPage() {
 
                       {/* Description & CV note details */}
                       {app.notes && (
-                        <p className="text-[9px] text-zinc-500 dark:text-zinc-400 leading-normal line-clamp-3 bg-zinc-50/50 dark:bg-zinc-950/20 p-1.5 rounded-lg border border-zinc-200/40 dark:border-white/5">
+                        <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-normal line-clamp-3 bg-zinc-50/50 dark:bg-zinc-950/20 p-1.5 rounded-lg border border-zinc-200/40 dark:border-white/5">
                           {app.notes}
                         </p>
                       )}
 
                       {/* Linked Note Link */}
                       {app.cvLink && (
-                        <div className="flex items-center gap-1 text-[8px] font-bold text-indigo-500">
+                        <div className="flex items-center gap-1 text-xs font-bold text-indigo-500">
                           <FileText className="h-3 w-3 shrink-0" /> Linked: <span className="underline truncate max-w-[100px]">{app.cvLink}</span>
                         </div>
                       )}
 
                       {/* Actions footer */}
                       <div className="pt-2 border-t border-zinc-150 dark:border-white/5 flex items-center justify-between">
-                        <span className="text-[8px] text-zinc-400 font-mono">{app.dateApplied}</span>
+                        <span className="text-xs text-zinc-400 font-mono">{app.dateApplied}</span>
                         <select
                           value={app.status}
                           onChange={e => handleUpdateStatus(app.id, e.target.value as any)}
-                          className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-white/5 rounded px-1 py-0.5 text-[8px] font-bold text-zinc-600 dark:text-zinc-400 focus:outline-none"
+                          className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-white/5 rounded px-1 py-0.5 text-xs font-bold text-zinc-600 dark:text-zinc-400 focus:outline-none"
                         >
                           <option value="Applied">Applied</option>
                           <option value="Shortlisted">Shortlisted</option>
@@ -232,7 +232,7 @@ export default function JobsPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Company Name</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Company Name</label>
               <input
                 type="text"
                 required
@@ -243,7 +243,7 @@ export default function JobsPage() {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Job Role/Title</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Job Role/Title</label>
               <input
                 type="text"
                 required
@@ -257,7 +257,7 @@ export default function JobsPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Salary (Annual £ or Hourly)</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Salary (Annual £ or Hourly)</label>
               <input
                 type="number"
                 value={salaryGbp || ''}
@@ -267,7 +267,7 @@ export default function JobsPage() {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Visa Sponsorship Provided?</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Visa Sponsorship Provided?</label>
               <select
                 value={sponsorship}
                 onChange={e => setSponsorship(e.target.value as any)}
@@ -282,7 +282,7 @@ export default function JobsPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Application Stage</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Application Stage</label>
               <select
                 value={status}
                 onChange={e => setStatus(e.target.value as any)}
@@ -296,7 +296,7 @@ export default function JobsPage() {
               </select>
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Link CV Document Note</label>
+              <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Link CV Document Note</label>
               <select
                 value={cvLink}
                 onChange={e => setCvLink(e.target.value)}
@@ -311,7 +311,7 @@ export default function JobsPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Notes & Reminders</label>
+            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Notes & Reminders</label>
             <textarea
               value={notesText}
               onChange={e => setNotesText(e.target.value)}
