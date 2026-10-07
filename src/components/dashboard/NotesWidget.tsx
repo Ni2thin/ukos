@@ -1,12 +1,10 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Modal } from '../ui/Modal';
 import { 
   Plus, 
-  BookOpen, 
   Trash2, 
   Edit3, 
-  Eye, 
   FileText, 
   Check, 
   FileCheck 
@@ -22,11 +20,11 @@ interface NotesWidgetProps {
 // Simple zero-dependency Markdown Parser Component
 const MarkdownPreview: React.FC<{ content: string }> = ({ content }) => {
   const parsedHtml = useMemo(() => {
-    let lines = content.split('\n');
+    const lines = content.split('\n');
     let html = '';
     let inList = false;
 
-    for (let line of lines) {
+    for (const line of lines) {
       // Headers
       if (line.startsWith('### ')) {
         if (inList) { html += '</ul>'; inList = false; }
@@ -91,7 +89,10 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
   onDeleteNote,
 }) => {
   const [activeNoteId, setActiveNoteId] = useState<string>(notes[0]?.id || '');
-  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const [editingNote, setEditingNote] = useState<Note | null>(null);
+  const isEditMode = editingNote !== null;
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
   const [isAddOpen, setIsAddOpen] = useState(false);
 
   // Form/Editor states
@@ -104,32 +105,41 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
   const [newCategory, setNewCategory] = useState<Note['category']>('UK Life');
 
   const activeNote = useMemo(() => {
-    return notes.find(n => n.id === activeNoteId) || notes[0];
-  }, [notes, activeNoteId]);
+    return editingNote || notes.find(n => n.id === activeNoteId) || notes[0];
+  }, [notes, activeNoteId, editingNote]);
 
-  // Set editor fields when activeNote changes or edit mode toggled
-  useEffect(() => {
-    if (activeNote) {
-      setNoteTitle(activeNote.title);
-      setNoteContent(activeNote.content);
-      setNoteCategory(activeNote.category);
-    }
-  }, [activeNote, isEditMode]);
+  // A draft is captured only when the user starts editing. Sync refreshes must
+  // never replace it, including when another device changes/deletes the note.
+  const beginEditing = (note: Note) => {
+    setEditingNote({ ...note });
+    setNoteTitle(note.title);
+    setNoteContent(note.content);
+    setNoteCategory(note.category);
+    setSaveError('');
+  };
+  const canLeaveDraft = () => !editingNote || (
+    noteTitle === editingNote.title && noteContent === editingNote.content && noteCategory === editingNote.category
+  ) || window.confirm('Discard your unsaved note changes?');
 
   // Categories list
   const categories: Note['category'][] = ['UK Life', 'University', 'Documents'];
 
   const handleSave = async () => {
-    if (activeNote && noteTitle.trim()) {
+    if (!editingNote || saving) return;
+    if (!noteTitle.trim()) { setSaveError('Enter a note title before saving.'); return; }
+    setSaving(true); setSaveError('');
+    try {
       await onSaveNote({
-        ...activeNote,
+        ...editingNote,
         title: noteTitle.trim(),
         content: noteContent,
         category: noteCategory,
         updatedAt: new Date().toISOString().split('T')[0]
       });
-      setIsEditMode(false);
-    }
+      setEditingNote(null);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : 'Could not save. Your draft is still here; please try again.');
+    } finally { setSaving(false); }
   };
 
   const handleCreateNote = async (e: React.FormEvent) => {
@@ -146,13 +156,15 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
       setActiveNoteId(newNote.id);
       setIsAddOpen(false);
       setNewTitle('');
-      setIsEditMode(true); // open editor immediately
+      beginEditing(newNote); // initialize from the new note, not a delayed sync response
     }
   };
 
   const handleDelete = async (id: string) => {
+    if (saving) return;
     if (confirm('Are you sure you want to delete this note?')) {
       await onDeleteNote(id);
+      if (editingNote?.id === id) setEditingNote(null);
       // Select another note
       const remaining = notes.filter(n => n.id !== id);
       if (remaining.length > 0) {
@@ -171,7 +183,8 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
           <p className="text-sm text-zinc-500 mt-1">Markdown-supported notes and checklists</p>
         </div>
         <button
-          onClick={() => setIsAddOpen(true)}
+          disabled={saving}
+          onClick={() => { if (canLeaveDraft()) { setEditingNote(null); setIsAddOpen(true); } }}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-md shadow-indigo-600/10"
         >
           <Plus className="h-3.5 w-3.5" /> New Note
@@ -179,7 +192,7 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
       </CardHeader>
       
       <CardContent className="p-0">
-        <div className="grid grid-cols-1 md:grid-cols-3 border-t border-zinc-200 dark:border-white/5 h-[420px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 border-t border-zinc-200 dark:border-white/5 min-h-[420px] md:h-[420px]">
           {/* Left Panel: Notes Sidebar */}
           <div className="border-r border-zinc-200 dark:border-white/5 overflow-y-auto p-4 space-y-4 max-h-full scrollbar-thin scrollbar-thumb-zinc-800">
             {categories.map((cat) => {
@@ -197,8 +210,10 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
                       <div
                         key={note.id}
                         onClick={() => {
+                          if (saving || activeNote.id === note.id || !canLeaveDraft()) return;
                           setActiveNoteId(note.id);
-                          setIsEditMode(false);
+                          setEditingNote(null);
+                          setSaveError('');
                         }}
                         className={`flex justify-between items-center px-3 py-2 rounded-xl text-left cursor-pointer transition-colors duration-150 group ${
                           activeNoteId === note.id 
@@ -225,16 +240,18 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
           </div>
 
           {/* Right Panel: Note Editor / Viewer */}
-          <div className="col-span-2 flex flex-col h-full bg-zinc-50 dark:bg-zinc-950/20">
+          <div className="md:col-span-2 min-w-0 flex flex-col h-full bg-zinc-50 dark:bg-zinc-950/20">
             {activeNote ? (
               <div className="flex flex-col h-full">
                 {/* Note Header Toolbar */}
-                <div className="flex justify-between items-center px-5 py-3 border-b border-zinc-200 dark:border-white/5 bg-zinc-100/50 dark:bg-zinc-900/10">
+                <div className="flex flex-wrap gap-3 justify-between items-center px-5 py-3 border-b border-zinc-200 dark:border-white/5 bg-zinc-100/50 dark:bg-zinc-900/10">
                   <div className="flex items-center gap-2">
                     <FileText className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
                     {isEditMode ? (
                       <input
                         type="text"
+                        aria-label="Note title"
+                        disabled={saving}
                         value={noteTitle}
                         onChange={(e) => setNoteTitle(e.target.value)}
                         className="bg-zinc-50 dark:bg-black/40 border border-zinc-200 dark:border-white/10 rounded px-2 py-0.5 text-sm text-zinc-900 dark:text-white focus:outline-none"
@@ -247,8 +264,10 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
                     {isEditMode ? (
                       <>
                         <select
+                          aria-label="Note category"
+                          disabled={saving}
                           value={noteCategory}
-                          onChange={(e) => setNoteCategory(e.target.value as any)}
+                          onChange={(e) => setNoteCategory(e.target.value as Note['category'])}
                           className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-white/10 rounded px-1.5 py-0.5 text-xs text-zinc-900 dark:text-white focus:outline-none"
                         >
                           <option value="UK Life">UK Life</option>
@@ -256,15 +275,16 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
                           <option value="Documents">Documents</option>
                         </select>
                         <button
+                          disabled={saving}
                           onClick={handleSave}
                           className="flex items-center gap-1 px-2.5 py-1 rounded bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white transition-colors"
                         >
-                          <Check className="h-3 w-3" /> Save
+                          <Check className="h-3 w-3" /> {saving ? 'Saving…' : 'Save'}
                         </button>
                       </>
                     ) : (
                       <button
-                        onClick={() => setIsEditMode(true)}
+                        onClick={() => beginEditing(activeNote)}
                         className="flex items-center gap-1 px-2.5 py-1 rounded bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-xs font-bold text-zinc-700 dark:text-zinc-300 hover:text-zinc-955 dark:hover:text-white transition-colors"
                       >
                         <Edit3 className="h-3 w-3" /> Edit Note
@@ -273,10 +293,14 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
                   </div>
                 </div>
 
+                {saveError && <p role="alert" className="px-5 py-2 text-sm text-rose-500">{saveError}</p>}
+                {isEditMode && <p role="status" className="px-5 pt-2 text-xs text-zinc-500">Editing draft · click Save when finished</p>}
                 {/* Note Body: Content Area */}
                 <div className="flex-1 p-5 overflow-y-auto">
                   {isEditMode ? (
                     <textarea
+                      aria-label="Note content"
+                      disabled={saving}
                       value={noteContent}
                       onChange={(e) => setNoteContent(e.target.value)}
                       placeholder="Write markdown here..."
@@ -316,7 +340,7 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
             <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Category</label>
             <select
               value={newCategory}
-              onChange={(e) => setNewCategory(e.target.value as any)}
+              onChange={(e) => setNewCategory(e.target.value as Note['category'])}
               className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-white/10 rounded-xl py-2 px-3 text-sm text-zinc-900 dark:text-white focus:outline-none focus:border-indigo-500"
             >
               <option value="UK Life">UK Life Notes</option>
