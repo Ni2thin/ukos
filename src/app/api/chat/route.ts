@@ -1,3 +1,4 @@
+import { calculateMonthlyEmi, parseCurrencyAmount } from '@/lib/finance';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
@@ -10,7 +11,7 @@ export async function POST(req: Request) {
     // Data summary to inject into the LLM context
     const dataContext = `
 Current GBP/INR Exchange Rate: £1 = ₹${context.exchangeRate.toFixed(2)}
-Tuition Remaining: £18,000 (₹${(18000 * context.exchangeRate).toLocaleString('en-IN')})
+Tuition balance: Not recorded; do not infer a balance.
 Total Amount Borrowed for Education Loan: ₹${context.loan.loanAmountInr.toLocaleString('en-IN')}
 Total Loan Repaid: ₹${context.loan.amountRepaidInr.toLocaleString('en-IN')}
 Loan Outstanding: ₹${(context.loan.loanAmountInr - context.loan.amountRepaidInr).toLocaleString('en-IN')} (approx. £${Math.round((context.loan.loanAmountInr - context.loan.amountRepaidInr) / context.exchangeRate).toLocaleString('en-GB')})
@@ -123,28 +124,25 @@ function getRuleBasedResponse(message: string, context: any): string {
     const repaid = context.loan.amountRepaidInr;
     const outstandingInr = totalBorrowed - repaid;
     const outstandingGbp = Math.round(outstandingInr / context.exchangeRate);
-    const progress = Math.round((repaid / totalBorrowed) * 100);
+    const progress = totalBorrowed > 0 ? Math.round((repaid / totalBorrowed) * 100) : 0;
+    const emi = calculateMonthlyEmi(totalBorrowed, context.loan.interestRate, context.loan.tenureYears);
     return `### Education Loan Status
 - **Borrowed Amount**: ₹${totalBorrowed.toLocaleString('en-IN')}
 - **Repaid So Far**: ₹${repaid.toLocaleString('en-IN')}
 - **Outstanding Balance**: ₹${outstandingInr.toLocaleString('en-IN')} (approx. **£${outstandingGbp.toLocaleString('en-GB')}**)
 - **Repayment Progress**: ${progress}% complete.
 
-Your next EMI is set at **₹68,000** (approx. £${Math.round(68000 / context.exchangeRate)}). Keep up the great progress!`;
+Estimated monthly EMI from your configured loan parameters: **₹${Math.round(emi).toLocaleString('en-IN')}** (approx. £${Math.round(emi / context.exchangeRate)}). This estimate excludes lender fees and moratorium interest; it is not a recorded payment due.`;
   }
 
   if (msg.includes('convert') || msg.includes('rate') || msg.includes('inr') || msg.includes('gbp') || msg.includes('pound')) {
-    // Check if there's a specific amount mentioned like £450 or 450
-    const numberMatches = msg.match(/(?:£|₹)?\s*(\d+(?:\.\d+)?)/);
-    if (numberMatches && numberMatches[1]) {
-      const amount = parseFloat(numberMatches[1]);
-      if (msg.includes('£') || msg.includes('gbp') || msg.includes('pound')) {
-        const inrVal = amount * context.exchangeRate;
-        return `At the current rate of **£1 = ₹${context.exchangeRate.toFixed(2)}**, **£${amount}** is equal to **₹${inrVal.toLocaleString('en-IN', { maximumFractionDigits: 2 })}**.`;
-      } else if (msg.includes('₹') || msg.includes('inr') || msg.includes('rupee')) {
-        const gbpVal = amount / context.exchangeRate;
-        return `At the current rate of **£1 = ₹${context.exchangeRate.toFixed(2)}**, **₹${amount.toLocaleString('en-IN')}** is equal to **£${gbpVal.toFixed(2)}**.`;
+    const parsed = parseCurrencyAmount(message);
+    if (parsed) {
+      const { amount, currency } = parsed;
+      if (currency === 'GBP') {
+        return `At **£1 = ₹${context.exchangeRate.toFixed(2)}**, **£${amount.toLocaleString('en-GB')}** equals **₹${(amount * context.exchangeRate).toLocaleString('en-IN', { maximumFractionDigits: 2 })}**.`;
       }
+      return `At **£1 = ₹${context.exchangeRate.toFixed(2)}**, **₹${amount.toLocaleString('en-IN')}** equals **£${(amount / context.exchangeRate).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}**.`;
     }
     return `The current live conversion rate is **£1 = ₹${context.exchangeRate.toFixed(2)}**. You can query conversions like: "Convert £450 to INR" or "How much is ₹100,000 in GBP?".`;
   }

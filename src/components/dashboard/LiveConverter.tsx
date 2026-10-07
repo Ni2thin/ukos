@@ -55,7 +55,6 @@ export const LiveConverter: React.FC<LiveConverterProps> = ({
   };
 
   // Static/Dynamic figures from prompt
-  const tuitionRemainingGbp = 18000;
   const loanOutstandingInr = loanDetails.loanAmountInr - loanDetails.amountRepaidInr;
 
   return (
@@ -116,8 +115,8 @@ export const LiveConverter: React.FC<LiveConverterProps> = ({
         <div className="grid grid-cols-2 gap-3 pt-2">
           <div className="p-3 bg-zinc-50 dark:bg-zinc-900/40 rounded-xl border border-zinc-200/60 dark:border-white/5 space-y-1">
             <span className="text-[10px] uppercase font-bold tracking-wider text-zinc-500">Tuition Remaining</span>
-            <div className="text-sm font-bold text-indigo-600 dark:text-indigo-400">£{tuitionRemainingGbp.toLocaleString('en-GB')}</div>
-            <div className="text-xs text-zinc-500 dark:text-zinc-400">₹{Math.round(tuitionRemainingGbp * exchangeRate).toLocaleString('en-IN')}</div>
+            <div className="text-sm font-bold text-indigo-600 dark:text-indigo-400">Not recorded</div>
+            <div className="text-xs text-zinc-500 dark:text-zinc-400">Add your actual tuition balance</div>
           </div>
 
           <div className="p-3 bg-zinc-50 dark:bg-zinc-900/40 rounded-xl border border-zinc-200/60 dark:border-white/5 space-y-1">

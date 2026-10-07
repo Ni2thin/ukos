@@ -9,6 +9,7 @@ import {
   Filter, 
   Calendar as CalendarIcon 
 } from 'lucide-react';
+import { lastSevenDaysExpenses } from '@/lib/finance';
 import { Expense } from '@/lib/mockData';
 
 interface ExpenseTrackerProps {
@@ -60,14 +61,7 @@ export const ExpenseTracker: React.FC<ExpenseTrackerProps> = ({
 
   // Weekly summary logic (last 7 days expenses)
   const weeklySummary = useMemo(() => {
-    const now = Date.now(); // Current time context
-    const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
-
-    // Filter expenses in last 7 days
-    const weeklyExpenses = expenses.filter(e => {
-      const expTime = new Date(e.date).getTime();
-      return expTime >= sevenDaysAgo;
-    });
+    const weeklyExpenses = lastSevenDaysExpenses(expenses);
 
     const categoryBreakdowns: { [key: string]: number } = {};
     let total = 0;

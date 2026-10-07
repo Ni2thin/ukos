@@ -55,6 +55,10 @@ export const DocumentVault: React.FC<DocumentVaultProps> = ({
     e.preventDefault();
     if (!fileObject) return;
 
+    if (!['application/pdf', 'image/jpeg', 'image/png'].includes(fileObject.type) || fileObject.size > 10 * 1024 * 1024) {
+      alert('Choose a PDF, JPG or PNG file no larger than 10MB.');
+      return;
+    }
     setIsUploading(true);
 
     // Read file as Base64 Data URL
@@ -63,16 +67,21 @@ export const DocumentVault: React.FC<DocumentVaultProps> = ({
       const base64Data = event.target?.result as string;
       const sizeStr = formatBytes(fileObject.size);
       
-      await onUploadDocument(
-        fileObject.name,
-        docCategory,
-        sizeStr,
-        base64Data
-      );
-
-      setIsUploading(false);
-      setFileObject(null);
-      setIsUploadOpen(false);
+      try {
+        await onUploadDocument(
+          fileObject.name,
+          docCategory,
+          sizeStr,
+          base64Data
+        );
+        setFileObject(null);
+        setIsUploadOpen(false);
+      } catch (error) {
+        console.error('Document save failed:', error);
+        alert('Document could not be saved. Browser storage may be full.');
+      } finally {
+        setIsUploading(false);
+      }
     };
 
     reader.onerror = (err) => {
@@ -121,8 +130,8 @@ export const DocumentVault: React.FC<DocumentVaultProps> = ({
     <Card className="h-full select-none">
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <div>
-          <CardTitle>Secure Document Vault</CardTitle>
-          <p className="text-xs text-zinc-500 mt-1">Encrypted client-side storage for Visa & CAS credentials</p>
+          <CardTitle>Document Vault</CardTitle>
+          <p className="text-xs text-zinc-500 mt-1">Documents saved in browser storage; not encrypted</p>
         </div>
         <button
           onClick={() => setIsUploadOpen(true)}
@@ -187,7 +196,7 @@ export const DocumentVault: React.FC<DocumentVaultProps> = ({
                   </div>
                   <div>
                     <span className="text-xs font-semibold text-zinc-900 dark:text-white block truncate max-w-[140px] sm:max-w-[220px]">
-                      {doc.name}
+                      {doc.name}{!doc.fileData && ' (sample)'}
                     </span>
                     <div className="flex gap-2 items-center mt-0.5 text-[9px] text-zinc-500 dark:text-zinc-400">
                       <span>{doc.category}</span>
@@ -256,10 +265,10 @@ export const DocumentVault: React.FC<DocumentVaultProps> = ({
               <div className="space-y-2">
                 <Upload className="h-8 w-8 text-zinc-400 dark:text-zinc-500 mx-auto" />
                 <div className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-                  {fileObject ? fileObject.name : 'Click to select or drag file here'}
+                  {fileObject ? fileObject.name : 'Click to select a file'}
                 </div>
                 <div className="text-[10px] text-zinc-500 dark:text-zinc-400">
-                  {fileObject ? `File Size: ${formatBytes(fileObject.size)}` : 'Supports PDF, JPG, PNG up to 10MB'}
+                  {fileObject ? `File Size: ${formatBytes(fileObject.size)}` : 'Supports PDF, JPG, PNG up to 10MB; browser storage capacity varies'}
                 </div>
               </div>
             </div>
@@ -271,7 +280,7 @@ export const DocumentVault: React.FC<DocumentVaultProps> = ({
               disabled={!fileObject || isUploading}
               className="w-full py-2.5 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors text-sm disabled:opacity-50"
             >
-              {isUploading ? 'Uploading & Encrypting...' : 'Securely Save to Vault'}
+              {isUploading ? 'Saving...' : 'Save to Vault'}
             </button>
           </div>
         </form>

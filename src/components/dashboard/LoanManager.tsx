@@ -1,3 +1,4 @@
+import { calculateMonthlyEmi } from '@/lib/finance';
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Modal } from '../ui/Modal';
@@ -58,17 +59,8 @@ export const LoanManager: React.FC<LoanManagerProps> = ({
   const [emiTenure, setEmiTenure] = useState(6);
   const [calculatedEmi, setCalculatedEmi] = useState({ inr: 0, gbp: 0 });
 
-  // Calculate EMI
-  const calculateEmiValue = (principal: number, annualRate: number, years: number) => {
-    const monthlyRate = annualRate / 12 / 100;
-    const months = years * 12;
-    if (monthlyRate === 0) return principal / months;
-    const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
-    return isNaN(emi) ? 0 : emi;
-  };
-
   useEffect(() => {
-    const emiInr = calculateEmiValue(emiLoan, emiRate, emiTenure);
+    const emiInr = calculateMonthlyEmi(emiLoan, emiRate, emiTenure);
     const emiGbp = emiInr / exchangeRate;
     setCalculatedEmi({ inr: Math.round(emiInr), gbp: Math.round(emiGbp) });
   }, [emiLoan, emiRate, emiTenure, exchangeRate]);

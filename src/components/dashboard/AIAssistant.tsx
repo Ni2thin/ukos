@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
-import { Send, Bot, Sparkles, User, RefreshCw } from 'lucide-react';
+import { Card, CardHeader, CardTitle } from '../ui/Card';
+import { Send, Bot, Sparkles, User } from 'lucide-react';
 import { Expense, LoanDetails, CalendarEvent, SavingsGoal } from '@/lib/mockData';
+
+import { currentMonthExpenses, lastSevenDaysExpenses, localDateKey } from '@/lib/finance';
 
 interface AIAssistantProps {
   exchangeRate: number;
@@ -44,25 +46,16 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
 
   // Generate Current Context to feed the API
   const getContextPayload = () => {
-    // 1. Calculate Monthly Spend (GBP)
-    const monthlySpend = expenses.reduce((sum, e) => sum + e.amountGbp, 0);
-
-    // 2. Calculate Weekly Spend (last 7 days)
-    const now = Date.now();
-    const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
-    const weeklySpend = expenses
-      .filter(e => new Date(e.date).getTime() >= sevenDaysAgo)
-      .reduce((sum, e) => sum + e.amountGbp, 0);
-
-    // 3. Category breakdowns
-    const expensesByCategory: { [key: string]: number } = {};
-    expenses.forEach(e => {
+    const monthlyExpenses = currentMonthExpenses(expenses);
+    const monthlySpend = monthlyExpenses.reduce((sum, e) => sum + e.amountGbp, 0);
+    const weeklySpend = lastSevenDaysExpenses(expenses).reduce((sum, e) => sum + e.amountGbp, 0);
+    const expensesByCategory: Record<string, number> = {};
+    monthlyExpenses.forEach(e => {
       expensesByCategory[e.category] = (expensesByCategory[e.category] || 0) + e.amountGbp;
     });
-
-    // 4. Upcoming events
     const upcomingEvents = events
-      .filter(e => new Date(e.date).getTime() >= now - 24 * 60 * 60 * 1000)
+      .filter(e => e.date >= localDateKey())
+      .sort((a, b) => a.date.localeCompare(b.date))
       .slice(0, 5);
 
     return {
@@ -71,7 +64,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
       monthlySpend,
       weeklySpend,
       expensesByCategory,
-      recentExpenses: expenses,
+      recentExpenses: [...expenses].sort((a, b) => b.date.localeCompare(a.date)),
       upcomingEvents,
       savings
     };
@@ -126,21 +119,19 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
     'How much have I spent on food?'
   ];
 
-  // Helper function to render simple inline bold tags inside chats
-  const renderMessageContent = (text: string) => {
-    // Standard quick formatting
-    let formatted = text;
-    formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    formatted = formatted.split('\n').join('<br />');
-
-    return (
-      <div 
-        className="text-xs leading-relaxed select-text" 
-        dangerouslySetInnerHTML={{ __html: formatted }}
-      />
-    );
-  };
+  // React escapes text; never interpret user or model output as HTML.
+  const renderMessageContent = (text: string) => (
+    <div className="text-xs leading-relaxed select-text space-y-1">
+      {text.split('\n').map((line, index) => (
+        <div key={index} className={line.startsWith('### ') ? 'font-semibold' : 'min-h-4'}>
+          {line.replace(/^### /, '').split(/(\*\*.*?\*\*|\*[^*]+\*)/g).map((part, i) =>
+            part.startsWith('**') && part.endsWith('**') ? <strong key={i}>{part.slice(2, -2)}</strong> :
+            part.startsWith('*') && part.endsWith('*') ? <em key={i}>{part.slice(1, -1)}</em> : part
+          )}
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <Card className="h-full select-none flex flex-col overflow-hidden">
@@ -236,12 +227,14 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            aria-label="Ask AI Companion"
             placeholder="Ask AI Companion..."
             disabled={isLoading}
             className="flex-1 bg-zinc-50 dark:bg-black/40 border border-zinc-200 dark:border-white/10 rounded-xl py-2 px-3 text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-indigo-500/50 disabled:opacity-50 placeholder-zinc-500 dark:placeholder-zinc-400"
           />
           <button
             type="submit"
+            aria-label="Send message"
             disabled={!input.trim() || isLoading}
             className="p-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white rounded-xl transition-colors shadow-md shadow-indigo-600/10"
           >

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { currentMonthExpenses } from '@/lib/finance';
 import { useDashboard } from '@/context/DashboardContext';
 import { Overview } from '@/components/dashboard/Overview';
 import { LiveConverter } from '@/components/dashboard/LiveConverter';
@@ -24,7 +25,7 @@ export default function Home() {
 
   if (loading) return null;
 
-  const monthlySpendGbp = expenses.reduce((sum, e) => sum + e.amountGbp, 0);
+  const monthlySpendGbp = currentMonthExpenses(expenses).reduce((sum, e) => sum + e.amountGbp, 0);
   const totalSavingsGbp = savings.reduce((sum, g) => sum + g.currentGbp, 0);
 
   return (

@@ -41,8 +41,6 @@ export const Overview: React.FC<OverviewProps> = ({
   const loanOutstandingInr = loanDetails.loanAmountInr - loanDetails.amountRepaidInr;
   const loanOutstandingGbp = loanOutstandingInr / exchangeRate;
 
-  // Let's assume the user has a fixed stipend/cash buffer, say £3,000 + savings
-  const cashAvailableGbp = 3200 + totalSavingsGbp - (monthlySpendGbp * 0.1); // Dynamic cash estimation
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 select-none">
@@ -130,17 +128,17 @@ export const Overview: React.FC<OverviewProps> = ({
       <Card className="hover:scale-[1.02] duration-200">
         <CardContent className="p-4 flex flex-col justify-between h-28">
           <div className="flex justify-between items-start">
-            <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Cash Liquid</span>
+            <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Cash Balance</span>
             <div className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400">
               <Wallet className="h-4 w-4" />
             </div>
           </div>
           <div>
             <h4 className="text-xl font-bold text-zinc-900 dark:text-white tracking-tight">
-              £{Math.round(cashAvailableGbp).toLocaleString('en-GB')}
+              Not recorded
             </h4>
             <p className="text-[10px] text-zinc-500 dark:text-zinc-400 mt-1">
-              ₹{Math.round(cashAvailableGbp * exchangeRate).toLocaleString('en-IN')}
+              Add a cash account to track this balance
             </p>
           </div>
         </CardContent>

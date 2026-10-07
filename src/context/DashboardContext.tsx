@@ -24,6 +24,7 @@ import {
   Expense, LoanDetails, LoanTransaction, Note, CalendarEvent, SavingsGoal, LivingEstimate, VaultDocument, UserProfile,
   TenancyDetails, InventoryItem, RentPayment, LandlordComm, BillSplit, JobApplication, GPDetails, Prescription, MedicalAppointment, EmergencyContact
 } from '@/lib/db';
+import { localDateKey } from '@/lib/finance';
 import { fetchGbpToInrRate } from '@/lib/exchange';
 
 interface DashboardContextType {
@@ -255,7 +256,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       amountGbp,
       amountInr: Math.round(amountGbp * exchangeRate),
       category,
-      date: new Date().toISOString().split('T')[0]
+      date: localDateKey()
     };
     const saved = await saveExpense(newExp);
     setExpenses(prev => [saved, ...prev]);
@@ -273,7 +274,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       id: `tx-${Date.now()}`,
       amountInr,
       amountGbp: Math.round(amountInr / exchangeRate),
-      date: new Date().toISOString().split('T')[0],
+      date: localDateKey(),
       type
     };
     const saved = await saveLoanTransaction(newTx);
@@ -378,7 +379,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       name,
       category,
       fileSize: size,
-      uploadDate: new Date().toISOString().split('T')[0],
+      uploadDate: localDateKey(),
       fileData: dataUrl
     };
     const saved = await saveDocument(newDoc);

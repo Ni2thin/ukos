@@ -25,9 +25,8 @@ export const CalendarWidget: React.FC<CalendarWidgetProps> = ({
   onAddEvent,
   onDeleteEvent,
 }) => {
-  // Let's set the initial date to June 2026 (based on current time metadata)
-  const [currentDate, setCurrentDate] = useState<Date>(new Date(2026, 5, 11)); // June 11, 2026
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date(2026, 5, 11));
+  const [currentDate, setCurrentDate] = useState<Date>(() => new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(() => new Date());
   const [isAddOpen, setIsAddOpen] = useState(false);
 
   // Form states
@@ -278,6 +277,12 @@ export const CalendarWidget: React.FC<CalendarWidgetProps> = ({
       {/* MODAL: Log event */}
       <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title={`Add event on ${formattedSelectedDate}`}>
         <form onSubmit={handleAddEventSubmit} className="space-y-4">
+          <div className="space-y-1">
+            <label htmlFor="event-date" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Event Date</label>
+            <input id="event-date" type="date" required value={formattedSelectedDate}
+              onChange={e => { if (e.target.value) setSelectedDate(new Date(`${e.target.value}T00:00:00`)); }}
+              className="w-full rounded-xl border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-black/40 p-2 text-sm" />
+          </div>
           <div className="space-y-1">
             <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Event Title</label>
             <input
