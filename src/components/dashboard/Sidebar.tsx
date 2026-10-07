@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
@@ -15,9 +15,10 @@ import {
   Sparkles,
   Home,
   Briefcase,
-  HeartPulse
+  HeartPulse,
+  ShieldCheck
 } from 'lucide-react';
-import { supabase } from '@/lib/db';
+import { getStorageStatus, subscribeStorage } from '@/lib/storage';
 import { useDashboard } from '@/context/DashboardContext';
 
 interface SidebarProps {
@@ -27,6 +28,7 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, onToggleTheme }) => {
   const pathname = usePathname();
+  const sync = useSyncExternalStore(subscribeStorage,getStorageStatus,getStorageStatus);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { profile } = useDashboard();
 
@@ -37,7 +39,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, onToggleTheme }) =
     { name: 'Knowledge & Docs', path: '/documents', icon: FileText },
     { name: 'Tenancy & Renting', path: '/renting', icon: Home },
     { name: 'Job Board (Kanban)', path: '/jobs', icon: Briefcase },
-    { name: 'NHS GP & Health', path: '/health', icon: HeartPulse }
+    { name: 'NHS GP & Health', path: '/health', icon: HeartPulse },
+    { name: 'Backup & Sync', path: '/settings', icon: ShieldCheck }
   ];
 
   const handleToggleMobile = () => setMobileOpen(!mobileOpen);
@@ -90,29 +93,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, onToggleTheme }) =
 
       {/* Footer Docks */}
       <div className="border-t border-white/5 pt-4 space-y-4">
-        {/* DB Connection Indicator */}
-        <div className="p-3 bg-zinc-900/40 rounded-xl border border-white/5 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {supabase ? (
-              <>
-                <Server className="h-3.5 w-3.5 text-emerald-400" />
-                <div>
-                  <span className="text-[10px] text-white font-bold block leading-none">Supabase DB</span>
-                  <span className="text-[8px] text-emerald-400 font-medium">Sync Active</span>
-                </div>
-              </>
-            ) : (
-              <>
-                <HardDrive className="h-3.5 w-3.5 text-amber-400" />
-                <div>
-                  <span className="text-[10px] text-white font-bold block leading-none">Local Sand</span>
-                  <span className="text-[8px] text-amber-400 font-medium">Offline Storage</span>
-                </div>
-              </>
-            )}
-          </div>
-          <span className={`h-1.5 w-1.5 rounded-full ${supabase ? 'bg-emerald-400 shadow-[0_0_6px_#10b981]' : 'bg-amber-400 shadow-[0_0_6px_#f59e0b]'}`} />
-        </div>
+        <Link href="/settings" className="p-3 bg-zinc-900/40 rounded-xl border border-white/5 flex items-center gap-2">
+          {sync.scope==='guest'?<HardDrive className="h-3.5 w-3.5 text-amber-400"/>:<Server className="h-3.5 w-3.5 text-indigo-400"/>}
+          <div><span className="text-[10px] text-white font-bold block">{sync.scope==='guest'?'Local records':'Private account'}</span>
+          <span className={`text-[9px] ${sync.phase==='ready'?'text-emerald-400':'text-amber-400'}`}>
+            {sync.scope==='guest'?'Backup & sign-in':!sync.online?'Offline · saved locally':sync.phase==='syncing'?'Syncing…':sync.phase==='conflict'?'Conflict · review needed':sync.phase==='error'?'Sync failed · retrying':sync.pending?'Pending upload':sync.phase==='ready'?'All changes synced':'Checking cloud records'}
+          </span></div>
+        </Link>
 
         {/* Theme and clock control */}
         <div className="flex items-center justify-between">

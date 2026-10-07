@@ -2,14 +2,18 @@
 
 import React, { useState, useEffect } from 'react';
 import { DashboardProvider } from '@/context/DashboardContext';
+import { initializeStorage, getStorageStatus, subscribeStorage } from '@/lib/storage';
+import { useSyncExternalStore } from 'react';
 import { Sidebar } from './Sidebar';
 
 export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const storageStatus = useSyncExternalStore(subscribeStorage,getStorageStatus,getStorageStatus);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [storageError, setStorageError] = useState('');
 
   useEffect(() => {
-    setMounted(true);
+    initializeStorage().then(() => setMounted(true)).catch(error => setStorageError(error instanceof Error ? error.message : 'Storage could not be opened.'));
     // Read cached theme or use system preference
     const storedTheme = localStorage.getItem('ukos_theme');
     if (storedTheme === 'light') {
@@ -30,6 +34,8 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
     }
   }, [isDarkMode, mounted]);
 
+  if (storageError) return <div role="alert" className="p-8 text-sm text-rose-500">UKOS could not open its saved records: {storageError}. Existing storage has been preserved; do not clear browser data.</div>;
+
   if (!mounted) {
     return (
       <div className="min-h-screen bg-zinc-950 flex flex-col justify-center items-center select-none text-center">
@@ -39,7 +45,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
   }
 
   return (
-    <DashboardProvider>
+    <DashboardProvider key={storageStatus.scope}>
       <div className="min-h-screen flex flex-col md:flex-row bg-[#fcfcfd] dark:bg-[#030303] text-zinc-900 dark:text-white transition-colors duration-200 selection:bg-indigo-500/20">
         <Sidebar isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(!isDarkMode)} />
         <main className="flex-1 min-w-0 p-4 md:p-6 overflow-y-auto max-h-screen scrollbar-thin scrollbar-thumb-zinc-800">

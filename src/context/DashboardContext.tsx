@@ -240,6 +240,8 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     };
 
     loadAllData();
+    window.addEventListener('ukos:data',loadAllData);
+    return () => window.removeEventListener('ukos:data',loadAllData);
   }, []);
 
   const onRefreshRate = async () => {
@@ -251,7 +253,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const onAddExpense = async (title: string, amountGbp: number, category: Expense['category']) => {
     const newExp: Expense = {
-      id: `exp-${Date.now()}`,
+      id: crypto.randomUUID(),
       title,
       amountGbp,
       amountInr: Math.round(amountGbp * exchangeRate),
@@ -271,7 +273,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const onAddLoanTransaction = async (amountInr: number, type: 'EMI' | 'Extra Payment') => {
     const newTx: LoanTransaction = {
-      id: `tx-${Date.now()}`,
+      id: crypto.randomUUID(),
       amountInr,
       amountGbp: Math.round(amountInr / exchangeRate),
       date: localDateKey(),

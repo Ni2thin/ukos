@@ -44,3 +44,9 @@ Run `npm test` for financial calculation and companion regression tests.
 For optional broader cloud responses, set `GEMINI_API_KEY` in an ignored `.env.local` file and restart the dev server. The user must enable the cloud checkbox before an unsupported local question is sent to Google Gemini. The conversation and selected budget, loan, savings, expense and calendar fields are shared; passport numbers, profile fields and document files are excluded. Recorded numerical questions continue to use deterministic local answers. Cloud responses time out and fall back to local guidance when unavailable.
 
 The cloud route requires application authentication and deployment rate limiting before a public deployment with a paid API key. Local request validation and size limits do not replace those controls.
+
+## Backup, recovery and private sync
+
+Open **Backup & Sync** in the sidebar to export a JSON backup, preview and restore one, review the snapshot from before a restore, or recover deleted entries. All record collections and uploaded document content are included; backups contain sensitive data and are not encrypted.
+
+Cloud sync is local-first, account-scoped, and backed by revision checks and a durable retry queue. It requires a Supabase project. Follow [supabase/SETUP.md](supabase/SETUP.md) to configure the database migration, Email authentication and public environment variables. No Supabase project is currently configured, so live sign-in, RLS and multi-device sync still require activation and verification.
