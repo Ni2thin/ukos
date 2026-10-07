@@ -56,3 +56,7 @@ Cloud sync is local-first, account-scoped, and backed by revision checks and a d
 The October 2026 redesign uses locally served Satoshi, Staatliches and Stint Ultra Condensed fonts, a navy/blue palette, readable labels, simpler navigation, a mobile quick dock, three Home money summaries, and reduced-motion support. Light mode is retained. Font sources and licenses are recorded in `public/fonts/`.
 
 The redesign is isolated in the `checkpoint-editorial-ui` commit/tag. To undo it without rewriting history, run `git revert checkpoint-editorial-ui`, then push the resulting revert commit. The preceding backup/sync checkpoint remains `checkpoint-backup-sync`.
+
+### UK101 accounts and welcome page
+
+Signed-out visitors now see a UK101 welcome page with email-as-username/password sign-in and account creation. Connect Supabase using `supabase/SETUP.md` to activate accounts. Until configured, the page offers explicitly labelled local access to existing records. The `checkpoint-uk101-welcome` commit/tag isolates this change; undo with `git revert checkpoint-uk101-welcome`.

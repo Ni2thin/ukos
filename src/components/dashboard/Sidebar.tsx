@@ -16,20 +16,24 @@ import {
   Home,
   Briefcase,
   HeartPulse,
+  LogOut,
   ShieldCheck
 } from 'lucide-react';
-import { getStorageStatus, subscribeStorage } from '@/lib/storage';
+import { getStorageStatus, subscribeStorage, supabase } from '@/lib/storage';
 import { useDashboard } from '@/context/DashboardContext';
 
 interface SidebarProps {
+  onExitLocal: () => void;
   isDarkMode: boolean;
   onToggleTheme: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, onToggleTheme }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, onToggleTheme, onExitLocal }) => {
   const pathname = usePathname();
   const sync = useSyncExternalStore(subscribeStorage,getStorageStatus,getStorageStatus);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
+  const [signOutError, setSignOutError] = useState('');
   const { profile } = useDashboard();
 
   const navItems = [
@@ -50,7 +54,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, onToggleTheme }) =
       {/* Brand Header */}
       <div className="pb-6 border-b border-white/5 space-y-3">
         <h1 className="brand-title text-white flex items-center gap-1.5">
-          UKOS <Sparkles className="h-4 w-4 text-indigo-400 fill-indigo-400" />
+          UK101 <Sparkles className="h-4 w-4 text-indigo-400 fill-indigo-400" />
         </h1>
         {/* User Profile Pill */}
         <div className="flex items-center gap-2.5 p-2 bg-white/5 rounded-xl border border-white/5">
@@ -62,8 +66,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, onToggleTheme }) =
             </div>
           )}
           <div className="min-w-0">
-            <span className="text-sm font-black text-white block truncate uppercase tracking-wider">{profile.fullName || 'NITTHIN'}</span>
-            <span className="text-xs text-zinc-500 font-semibold block leading-none">MSc Student Surrey</span>
+            <span className="text-sm font-black text-white block truncate uppercase tracking-wider">{sync.scope === 'guest' ? 'Local workspace' : sync.email || profile.fullName || 'Your account'}</span>
+            <span className="text-xs text-zinc-500 font-semibold block leading-none">{sync.scope === 'guest' ? 'This browser only' : 'Your personal workspace'}</span>
           </div>
         </div>
       </div>
@@ -103,6 +107,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, onToggleTheme }) =
           </span></div>
         </Link>
 
+        <button disabled={signingOut} onClick={async () => {
+          if (sync.scope === 'guest') { onExitLocal(); return; }
+          if (!supabase) return;
+          setSigningOut(true); setSignOutError('');
+          try { const {error} = await supabase.auth.signOut({scope:'local'}); if (error) throw error; }
+          catch (error) { setSignOutError(error instanceof Error ? error.message : 'Sign-out failed. Try again.'); }
+          finally { setSigningOut(false); }
+        }} className="flex items-center gap-2 text-sm text-zinc-300 hover:text-white py-2 disabled:opacity-50"><LogOut className="h-4 w-4"/>{signingOut ? 'Signing out…' : sync.scope === 'guest' ? 'Back to welcome' : 'Sign out'}</button>
+        {signOutError && <p role="alert" className="text-xs text-rose-300">{signOutError}</p>}
         {/* Theme and clock control */}
         <div className="flex items-center justify-between">
           <span className="text-xs uppercase tracking-wider text-zinc-500 font-bold">Theme</span>
@@ -136,7 +149,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, onToggleTheme }) =
             </div>
           )}
           <h1 className="text-sm font-black text-white tracking-tight truncate max-w-[150px]">
-            {profile.fullName.toUpperCase() || 'NITTHIN'}'s UKOS
+            UK101
           </h1>
         </div>
         <button

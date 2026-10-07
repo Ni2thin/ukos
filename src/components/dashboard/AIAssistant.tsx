@@ -121,7 +121,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({exchangeRate, rateSourc
       <header className="flex items-center justify-between gap-3 p-4 border-b border-zinc-200 dark:border-white/5">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-500"><Bot className="h-5 w-5" /></div>
-          <div><h3 className="card-title text-zinc-900 dark:text-white">UKOS AI Companion</h3><p className="text-xs text-zinc-500 mt-1">Budget clarity. Better plans.</p></div>
+          <div><h3 className="card-title text-zinc-900 dark:text-white">UK101 AI Companion</h3><p className="text-xs text-zinc-500 mt-1">Budget clarity. Better plans.</p></div>
         </div>
         <button type="button" onClick={clearChat} disabled={!messages.length && !isLoading} aria-label="Start a new chat" title="Start a new chat" className="p-2 rounded-lg text-zinc-500 hover:bg-zinc-100 dark:hover:bg-white/5 disabled:opacity-30"><RotateCcw className="h-4 w-4" /></button>
       </header>

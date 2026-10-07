@@ -167,7 +167,7 @@ export const NotesWidget: React.FC<NotesWidgetProps> = ({
     <Card className="h-full select-none">
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <div>
-          <CardTitle>UKOS Knowledge Notebook</CardTitle>
+          <CardTitle>UK101 Knowledge Notebook</CardTitle>
           <p className="text-sm text-zinc-500 mt-1">Markdown-supported notes and checklists</p>
         </div>
         <button

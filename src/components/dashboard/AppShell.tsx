@@ -5,22 +5,20 @@ import { DashboardProvider } from '@/context/DashboardContext';
 import { initializeStorage, getStorageStatus, subscribeStorage } from '@/lib/storage';
 import { useSyncExternalStore } from 'react';
 import { Sidebar } from './Sidebar';
+import { WelcomePage } from '@/components/auth/WelcomePage';
 
 export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const storageStatus = useSyncExternalStore(subscribeStorage,getStorageStatus,getStorageStatus);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [storageError, setStorageError] = useState('');
+  const [localOpen, setLocalOpen] = useState(false);
 
   useEffect(() => {
-    initializeStorage().then(() => setMounted(true)).catch(error => setStorageError(error instanceof Error ? error.message : 'Storage could not be opened.'));
-    // Read cached theme or use system preference
-    const storedTheme = localStorage.getItem('ukos_theme');
-    if (storedTheme === 'light') {
-      setIsDarkMode(false);
-    } else {
-      setIsDarkMode(true);
-    }
+    initializeStorage().then(() => {
+      setIsDarkMode(localStorage.getItem('ukos_theme') !== 'light');
+      setMounted(true);
+    }).catch(error => setStorageError(error instanceof Error ? error.message : 'Storage could not be opened.'));
   }, []);
 
   useEffect(() => {
@@ -34,20 +32,24 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
     }
   }, [isDarkMode, mounted]);
 
-  if (storageError) return <div role="alert" className="p-8 text-sm text-rose-500">UKOS could not open its saved records: {storageError}. Existing storage has been preserved; do not clear browser data.</div>;
+  if (storageError) return <div role="alert" className="p-8 text-sm text-rose-500">UK101 could not open its saved records: {storageError}. Existing storage has been preserved; do not clear browser data.</div>;
 
   if (!mounted) {
     return (
       <div className="min-h-screen bg-zinc-950 flex flex-col justify-center items-center select-none text-center">
-        <h2 className="text-sm font-bold text-white tracking-wider">BOOTSTRAPPING UKOS</h2>
+        <h2 className="text-sm font-bold text-white tracking-wider">OPENING UK101</h2>
       </div>
     );
+  }
+
+  if (storageStatus.scope === 'guest' && (storageStatus.configured || !localOpen)) {
+    return <WelcomePage onOpenLocal={() => setLocalOpen(true)} />;
   }
 
   return (
     <DashboardProvider key={storageStatus.scope}>
       <div className="min-h-screen flex flex-col md:flex-row ukos-shell text-zinc-900 dark:text-white transition-colors duration-200 selection:bg-indigo-500/20">
-        <Sidebar isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(!isDarkMode)} />
+        <Sidebar onExitLocal={() => setLocalOpen(false)} isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(!isDarkMode)} />
         <main className="ukos-main flex-1 min-w-0 p-5 md:p-8 lg:p-10 pb-24 md:pb-10 overflow-y-auto md:max-h-screen">
           {children}
         </main>

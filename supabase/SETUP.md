@@ -3,7 +3,7 @@
 Backup export, restore, restore undo and deleted-entry recovery already work locally. Cloud sign-in and sync require your own Supabase project. No service-role key is needed by this application.
 
 1. Create a Supabase project. In its SQL Editor, run `migrations/202610070001_private_snapshots.sql` once. This creates a new private snapshot table, owner-only row-level-security policies, and an atomic revision-checked save function. It leaves legacy tables untouched.
-2. In Authentication, enable Email/password sign-in. Keep email confirmation enabled. Set the Site URL to `http://localhost:3000` for development and add `http://localhost:3000/settings` to allowed redirect URLs. Add your actual production HTTPS URLs when deploying.
+2. In Authentication, enable Email/password sign-in. Keep email confirmation enabled. Set the Site URL to `http://localhost:3000` for development and add `http://localhost:3000/` and `http://localhost:3000/settings` to allowed redirect URLs. Add your actual production HTTPS URLs when deploying.
 3. In your project’s API settings, copy the project URL and public publishable key (or legacy anon key). Create an ignored `.env.local` in the project root:
 
    ```dotenv
@@ -12,7 +12,7 @@ Backup export, restore, restore undo and deleted-entry recovery already work loc
    ```
 
    Never use a secret or service-role key in a `NEXT_PUBLIC_` variable. Restart `npm run dev` after configuring these values.
-4. Open **Backup & Sync**, create an account, confirm its email, then sign in. A new account starts empty; local demo/personal records are not uploaded automatically. To move your local records, export a backup while signed out, sign in, choose that backup, review it, and restore it. This uploads the selected identity, health and document records to your Supabase account.
+4. Open the **UK101 welcome page**, create an account using an email address as the username and a password, confirm its email, then sign in. A new account starts empty; local demo/personal records are not uploaded automatically. Before configuring Supabase, use **Open this device’s local workspace**, then **Backup & Sync** to export any existing records. Once Supabase is configured, signed-out visitors see the welcome page on every dashboard route. Sign in, choose your exported backup in **Backup & Sync**, review it, and restore it. This uploads the selected identity, health and document records to your Supabase account.
 5. Verify with two accounts that each account sees only its own records. Test a signed-in offline edit, reload while offline, reconnect, and confirm that the sidebar changes from pending/error to synced. Test two-device conflicting edits; neither version should be silently discarded. Export both versions before applying a conflict choice.
 
 ## Database verification
@@ -40,3 +40,9 @@ The migration and pgTAP suite have **not** been executed against a live Supabase
 - Supabase Auth, project region, backup retention and account administration are managed in your Supabase dashboard. Review existing legacy tables separately: this new migration does not change their older permissions or migrate their contents.
 
 References: [Supabase RLS](https://supabase.com/docs/guides/database/postgres/row-level-security), [Supabase authentication](https://supabase.com/docs/guides/auth).
+
+## UK101 welcome page
+
+Email addresses are the login usernames. Sign-up requires password confirmation and at least eight characters; Supabase manages credential verification and email confirmation. Passwords are never written to application storage. New authenticated accounts use the existing per-user empty workspace and RLS-protected snapshot store. Sign out is available in the sidebar and in Backup & Sync.
+
+Without Supabase configured, credential fields and submission are disabled. The local-workspace link is explicitly a shared browser mode, not an authenticated account; it must be selected again after a full reload. The link is not offered when Supabase is configured. Existing local backup formats and storage keys retain their UKOS identifiers for compatibility.

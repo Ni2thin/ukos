@@ -11,7 +11,7 @@ const display = localFont({src: "../../public/fonts/staatliches.ttf", variable: 
 const editorial = localFont({src: "../../public/fonts/stint-ultra-condensed.ttf", variable: "--font-editorial", display: "swap"});
 
 export const metadata: Metadata = {
-  title: "UKOS — Personal Operating System for UK Student Life",
+  title: "UK101 — Personal Operating System for UK Student Life",
   description: "Manage your education loan repayment, convert GBP to INR live, track university notes, schedule visa appointments and part-time shifts, log expenses, and get AI budget insights.",
 };
 

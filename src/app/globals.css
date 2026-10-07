@@ -65,7 +65,7 @@ table, .tabular-nums { font-variant-numeric:tabular-nums; }
 .ukos-main > div > header:first-child { position:relative; padding:8px 0 28px; margin-bottom:32px; border-bottom:1px solid var(--card-border); }
 .page-title { font-family:var(--font-display),sans-serif; font-size:clamp(36px,4.5vw,64px); font-weight:400; line-height:1.05; letter-spacing:.015em; color:var(--foreground); text-wrap:balance; }
 .page-header p { margin-top:14px; font-size:16px; line-height:1.65; max-width:700px; color:var(--axis-color); }
-.page-header::before { content:'UKOS / YOUR PERSONAL WORKSPACE'; display:block; font-size:11px; font-weight:700; letter-spacing:.2em; color:var(--axis-color); margin-bottom:18px; }
+.page-header::before { content:'UK101 / YOUR PERSONAL WORKSPACE'; display:block; font-size:11px; font-weight:700; letter-spacing:.2em; color:var(--axis-color); margin-bottom:18px; }
 .ukos-card { position:relative; border:1px solid var(--card-border); border-radius:10px; background:var(--card-bg); transition:border-color .2s; }
 .ukos-card-featured { border-color:rgba(64,120,153,.4); }
 .card-title { font-family:var(--font-display),sans-serif; font-size:26px; font-weight:400; letter-spacing:.025em; }
@@ -105,3 +105,30 @@ table, .tabular-nums { font-variant-numeric:tabular-nums; }
 .dark .text-amber-600 { color:#fbbf24; }
 
 .ukos-card h3:not(.card-title) { font-family:var(--font-display),sans-serif; font-size:22px; font-weight:400; letter-spacing:.025em; }
+
+/* Public welcome and authentication surface. Always uses the navy identity. */
+.welcome-page { min-height:100svh; background:radial-gradient(ellipse at 15% 35%,#204057 0%,#0b1824 60%); color:#f4f1e9; padding:28px clamp(20px,6vw,96px); }
+.welcome-nav { display:flex; justify-content:space-between; align-items:center; gap:20px; padding-bottom:26px; border-bottom:1px solid #91bdd42b; }
+.welcome-brand-dot { color:#91bdd4; }
+.welcome-grid { max-width:1380px; margin:64px auto; display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); gap:clamp(32px,7vw,110px); align-items:center; }
+.welcome-eyebrow { color:#a4bac8; font-size:11px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; margin-bottom:22px; }
+.welcome-story h1 { font-family:var(--font-display),sans-serif; font-size:clamp(48px,6vw,88px); line-height:1.02; letter-spacing:.005em; }
+.welcome-description { margin-top:28px; color:#c3d1d9; max-width:480px; font-size:17px; line-height:1.8; }
+.welcome-features { margin-top:38px; display:grid; gap:24px; }
+.welcome-features > div { display:flex; align-items:flex-start; gap:16px; }
+.welcome-features svg { color:#91bdd4; margin-top:3px; flex-shrink:0; }
+.welcome-features h2 { font-size:15px; font-weight:700; }
+.welcome-features p { font-size:14px; color:#a4bac8; margin-top:3px; }
+.welcome-form-panel { background:#142737; border:1px solid #91bdd433; border-radius:12px; padding:clamp(24px,3.5vw,44px); box-shadow:0 24px 80px #0002; }
+.welcome-form-panel .page-title { font-size:clamp(30px,3vw,42px); color:#f4f1e9; }
+.welcome-input { display:block; width:100%; margin-top:8px; border:1px solid #91bdd440; border-radius:6px; padding:12px 14px; background:#0b1824; color:#f4f1e9; }
+.welcome-input:disabled { opacity:.55; cursor:not-allowed; }
+.welcome-input::placeholder { color:#a4bac8; }
+.welcome-input.pr-14 { padding-right:56px; }
+.welcome-submit { display:flex; width:100%; align-items:center; justify-content:space-between; padding:14px 18px; color:#0b1824; background:#a5c8db; border-radius:6px; font-weight:700; }
+.welcome-submit:hover:not(:disabled) { background:#c3dbe8; }
+.welcome-submit:disabled { opacity:.4; cursor:not-allowed; }
+.welcome-notice { border-left:2px solid #91bdd4; padding:0 0 0 14px; margin-bottom:24px; font-size:13px; color:#c3d1d9; }
+.welcome-notice p { margin-top:6px; line-height:1.6; }
+.welcome-footer { color:#a4bac8; font-size:12px; border-top:1px solid #91bdd42b; padding-top:22px; }
+@media(max-width:800px) { .welcome-grid { grid-template-columns:1fr; margin:36px auto; gap:36px; } .welcome-story h1 { font-size:54px; } .welcome-features { display:none; } .welcome-description { font-size:16px; margin-top:18px; } .welcome-nav > span:last-child { max-width:160px; text-align:right; font-size:12px; } }
