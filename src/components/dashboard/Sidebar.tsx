@@ -34,6 +34,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, onToggleTheme, onE
   const [mobileOpen, setMobileOpen] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
   const [signOutError, setSignOutError] = useState('');
+  const [brandAnimation, setBrandAnimation] = useState(0);
   const { profile } = useDashboard();
 
   const navItems = [
@@ -53,8 +54,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, onToggleTheme, onE
     <div className="sidebar-panel flex flex-col h-full overflow-y-auto bg-zinc-950/80 dark:bg-zinc-950/95 border-r border-white/5 backdrop-blur-2xl p-5 text-zinc-400 select-none">
       {/* Brand Header */}
       <div className="pb-6 border-b border-white/5 space-y-3">
-        <h1 className="brand-title text-white flex items-center gap-1.5">
-          UK101 <Sparkles className="h-4 w-4 text-indigo-400 fill-indigo-400" />
+        <h1 className="brand-title text-white">
+          <button type="button" className="brand-trigger" aria-label="Animate UK101 logo"
+            onClick={() => setBrandAnimation((count) => count + 1)}>
+            <span key={brandAnimation} aria-hidden="true" className={`brand-animation${brandAnimation ? ' is-playing' : ''}`}>
+              <span>{'UK101'.split('').map((letter, index) => (
+                <span key={index} className="brand-letter" style={{ animationDelay: `${index * 55}ms` }}>{letter}</span>
+              ))}</span>
+              <Sparkles className="brand-sparkle h-4 w-4 text-indigo-400 fill-indigo-400" />
+            </span>
+          </button>
         </h1>
         {/* User Profile Pill */}
         <div className="flex items-center gap-2.5 p-2 bg-white/5 rounded-xl border border-white/5">
