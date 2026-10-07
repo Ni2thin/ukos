@@ -240,7 +240,7 @@ export const LoanManager: React.FC<LoanManagerProps> = ({
                     <input 
                       type="range" 
                       min={1} 
-                      max={10} 
+                      max={15}
                       step={1}
                       value={emiTenure}
                       onChange={(e) => setEmiTenure(parseInt(e.target.value))}
